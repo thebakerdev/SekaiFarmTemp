@@ -1,0 +1,38 @@
+/* COLORS */
+
+$colors : (
+    red-1: #A70000,
+    red-2: #c02121,
+    'blue': #00a8ff,
+    'black':#2B2B2B,
+    'green': #8AC926,
+    'yellow': #F4BC22,
+    grey-1: #E7E7E7, 
+    grey-2: #EFEFEF,
+    grey-3: #F7F7F7,
+    grey-4: #C4C4C4,
+    grey-5: #9B9B9B
+);
+
+$primary : map-get($colors, 'green');
+
+$secondary: map-get($colors, 'yellow'); 
+
+
+/* BREAK POINTS */
+
+$breakpoints: (
+    xs: 480px,
+    sm: 768px,
+    md: 992px,
+    lg: 1200px
+);
+
+$breakpoint-xs: map-get($breakpoints, xs);
+
+$breakpoint-sm: map-get($breakpoints, sm);
+
+$breakpoint-md: map-get($breakpoints, md);
+
+$breakpoint-lg: map-get($breakpoints, lg);
+

@@ -1,0 +1,10 @@
+.user__menu {
+    a {
+        color: map-get($colors, 'black');
+        transition: all .1s ease-in;
+
+        &:hover {
+            color: $secondary;
+        }
+    }
+}

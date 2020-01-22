@@ -1,0 +1,14 @@
+.ui.form {
+    fieldset {
+        border: none;
+        margin:0;
+        padding: 0;
+
+        legend {
+            color: $primary;
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+    }
+}

@@ -1,0 +1,24 @@
+.site-header {
+    padding: 26px 0 11px !important;
+}
+
+.site-name a {
+    color: map-get($colors, 'black');
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 28px;
+    font-weight: bold !important;
+    text-transform: uppercase;
+
+    span {
+        color: $primary;
+    }
+}
+
+@include mq(sm) {
+    
+    .site-name a {
+        font-size: 32px;
+    }
+}

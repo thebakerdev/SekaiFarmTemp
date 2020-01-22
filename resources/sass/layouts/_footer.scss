@@ -1,0 +1,57 @@
+.footer {
+    color: map-get($colors, 'black');
+    font-size: 16px !important;
+    height: auto;
+    margin-top: -48px;
+    min-height: 48px;
+    padding: 0 15px;
+    
+    a {
+        color: map-get($colors, 'black');
+        &:hover {
+            color: $primary;
+        }
+
+        &.active {
+            color: $primary;
+        }
+    }
+}
+
+.footer__center,
+.footer__left,
+.footer__right {
+    text-align: center !important;
+}
+
+.footer__center {
+    padding: 0 !important;
+}
+
+.footer__left {
+    padding-bottom: 0 !important;
+}
+
+.footer__right {
+    padding-top: 0 !important;
+}
+
+// Align footer content to left and right on desktop
+@include mq(sm) {
+
+    .footer__center {
+        padding: 1rem !important;
+    }
+
+    .footer__left {
+        padding-bottom: 1rem !important;
+        padding-left: 0 !important;
+        text-align: left !important;
+    }
+
+    .footer__right {
+        padding-top: 1rem !important;
+        padding-right: 0 !important;
+        text-align: right !important;
+    }
+}
