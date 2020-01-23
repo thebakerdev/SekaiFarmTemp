@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="field">
                                         <label for="password_confirmation">{{ trans('translations.labels.credit_card') }}</label>
-                                        <input type="text" id="card" name="card">
+                                        <stripe-checkout :stripe-key="'{{ $stripe_key }}'" :client-secret="'{{ $payment_intent->client_secret}}'"></stripe-checkout>
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -166,6 +166,11 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('page-script-before')
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="{{ route('locale.localizeForJs') }}"></script>
 @endsection
 
 @section('page-script-after')

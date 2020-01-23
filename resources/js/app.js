@@ -27,6 +27,8 @@ Vue.component('stock-adjust', require('./components/admin/StockAdjust.vue').defa
 
 Vue.component('login-form', require('./components/storefront/LoginForm.vue').default); 
 
+Vue.component('stripe-checkout', require('./components/storefront/StripeCheckout.vue').default);
+
 /* Initialize vue */
 const app = new Vue({
     el: '#app',

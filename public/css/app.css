@@ -211,6 +211,42 @@ label {
   border-color: transparent transparent;
 }
 
+.StripeElement:not(#paymentRequestButton) {
+  padding: 0.67857143em 1em;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 4px;
+  background-color: white;
+}
+
+.StripeElement--focus {
+  border-color: #85b7d9;
+  /* box-shadow: 0 1px 3px 0 #cfd7df; */
+}
+
+.StripeElement--invalid {
+  border-color: #e0b4b4 !important;
+  background-color: #fff6f6 !important;
+}
+
+.StripeElement--error {
+  color: #db2828;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.stripe-checkout .ui.segment {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.stripe-checkout-payment-request .ui.horizontal.divider {
+  font-size: 12px !important;
+  font-weight: normal;
+}
+
 .ui.table {
   border-radius: 0;
   border: solid 1px #E7E7E7;
@@ -461,10 +497,6 @@ label {
   color: #fff;
   padding: 12px;
   text-align: center;
-}
-
-.product__form-input {
-  display: none;
 }
 
 @media screen and (min-width: 768px) {

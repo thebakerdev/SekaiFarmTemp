@@ -52,14 +52,12 @@
             @include('partials.footer')
         </div>
         <input type="hidden" ref="baseUrl" value="{{ url('/') }}">
-        <input type="hidden" ref="cryptoRate" value="{{ (isset(session('cryptoRate')['cryptoRate'])) ? session('cryptoRate')['cryptoRate'] : App\cryptocurrency::getRate() }}">
         @include('layouts.modals.loginModal')
     </div>
        
     <script src="{{ asset('js/jquery.3.3.1.min.js') }}"></script>
     <script src="{{ asset('js/semantic.min.js') }}"></script>
     @yield('page-script-before')
-    <script src="{{ route('locale.localizeForJs') }}"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
     @yield('page-script-after')
    
