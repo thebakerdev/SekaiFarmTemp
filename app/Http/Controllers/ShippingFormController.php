@@ -14,7 +14,7 @@ class ShippingFormController extends Controller {
 
   public function __construct() {
 
-    parent::__construct();
+   // parent::__construct();
 
     //get gemini settings
     $this->gemini = settings::getSetting('basic_info');

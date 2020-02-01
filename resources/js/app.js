@@ -25,9 +25,11 @@ Vue.prototype.trans = (string, args) => {
 /* Global vue components */
 Vue.component('stock-adjust', require('./components/admin/StockAdjust.vue').default);
 
-Vue.component('login-form', require('./components/storefront/LoginForm.vue').default); 
+Vue.component('user-auth', require('./components/storefront/UserAuth.vue').default); 
 
 Vue.component('stripe-checkout', require('./components/storefront/StripeCheckout.vue').default);
+
+Vue.component('user-registration', require('./components/storefront/UserRegistration.vue').default);
 
 /* Initialize vue */
 const app = new Vue({
@@ -60,6 +62,8 @@ const app = new Vue({
     mounted() {
         PageScripts.init();
 
-        this.product.price = this.$refs.price.value;
+        if (typeof this.$refs.price !== 'undefined') {
+            this.product.price = this.$refs.price.value;
+        }
     }
 });

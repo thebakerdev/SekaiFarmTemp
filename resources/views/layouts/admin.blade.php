@@ -33,17 +33,20 @@
                         <div class="item">
                             <strong>{{ __('translations.headings.menu') }}</strong>
                         </div>
-                        <a href="{{ action('AdminController@manage') }}" class="{{ Request::segment(1)=='manage' ? 'active teal':'' }} item">
-                            <span> <i class="cart icon"></i> {{ __('translations.headings.manage') }}</span>
+                        <a href="{{ route('admin.manage') }}" class="{{ Request::segment(1)=='manage' ? 'active teal':'' }} item">
+                            <span> <i class="cart icon"></i> {{ trans('translations.headings.manage') }}</span>
                         </a>
-                        <a href="{{ action('AdminController@pending') }}" class="{{ Request::segment(1)=='pending' ? 'active teal':'' }} item">
-                            <span> <i class="truck icon"></i> {{ __('translations.headings.pending_shipment') }}</span>
+                        <a href="{{ route('admin.pending') }}" class="{{ Request::segment(1)=='pending' ? 'active teal':'' }} item">
+                            <span> <i class="truck icon"></i> {{ trans('translations.headings.pending_shipment') }}</span>
                         </a>
-                        <a href="{{ action('AdminController@shipped') }}" class="{{ Request::segment(1)=='shipped' ? 'active teal':'' }} item">
-                            <span> <i class="paper plane icon"></i>{{ __('translations.headings.sent_shipment') }}</span>
+                        <a href="{{ route('admin.shipped') }}" class="{{ Request::segment(1)=='shipped' ? 'active teal':'' }} item">
+                            <span> <i class="paper plane icon"></i>{{ trans('translations.headings.sent_shipment') }}</span>
+                        </a>
+                        <a href="{{ route('admin.users') }}" class="{{ Request::segment(1)=='users' ? 'active teal':'' }} item">
+                            <span> <i class="users icon"></i> {{ trans('translations.headings.users') }}</span>
                         </a>
                         <a href="{{ action('SettingsController@index') }}" class="{{ Request::segment(1)=='settings' ? 'active teal':'' }} item">
-                            <span> <i class="cogs icon"></i>{{ __('translations.headings.settings') }}</span>
+                            <span> <i class="cogs icon"></i>{{ trans('translations.headings.settings') }}</span>
                         </a>
                     </div>
                 </div>
@@ -57,7 +60,6 @@
             </div>
         </main>
         <input type="hidden" ref="baseUrl" value="{{ url('/') }}">
-        <input type="hidden" ref="cryptoRate" value="{{ (isset(session('cryptoRate')['cryptoRate'])) ? session('cryptoRate')['cryptoRate'] : App\cryptocurrency::getRate() }}">
     </div>
     <script src="{{ asset('js/jquery.3.3.1.min.js') }}"></script>
     <script src="{{ asset('js/semantic.min.js') }}"></script>

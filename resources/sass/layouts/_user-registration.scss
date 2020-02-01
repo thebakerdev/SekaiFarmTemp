@@ -1,0 +1,30 @@
+.user-registration__subscription-total {
+    background-color: $secondary;
+    border-radius: 5px;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+}
+
+.user-registration__actions  {
+
+    text-align: center;
+
+    button {
+        margin-right: 0 !important;
+        margin-bottom: 1rem !important;
+        width: 100%;
+    }
+}
+
+@include mq(sm) {
+    
+    .user-registration__actions {
+        text-align: left;
+
+        button {
+            margin-right: 1rem !important;
+            width: auto;
+        }
+    }
+}

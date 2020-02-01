@@ -35,6 +35,9 @@
 // Table
 @import 'components/table';
 
+// Transitions
+@import 'components/transitions';
+
 // Header
 @import 'layouts/header';
 
@@ -47,8 +50,11 @@
 // Cart
 @import 'layouts/cart';
 
+// Registration
+@import 'layouts/user-registration';
+
 // Login
-@import 'layouts/login';
+@import 'layouts/user-auth';
 
 // Orders
 @import 'layouts/orders';

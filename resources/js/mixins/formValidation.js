@@ -1,10 +1,8 @@
-import axios from 'axios';
-
 const FormValidation = {
     methods: {
-        validate(form) {
+        validate(form_data, form) {
 
-            return form[this.$refs.form.method](this.$refs.form.action);
+            return form_data[form.method](form.action);
         }
     }
 }

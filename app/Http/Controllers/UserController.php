@@ -8,12 +8,13 @@ use App\address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\RegistrationRequest;
 
 class UserController extends Controller
 {
     public function __construct() 
     {
-        $this->middleware('auth')->except(['store']);
+        $this->middleware('auth')->except(['store','validateData']);
     }
 
     public function index()
@@ -27,7 +28,7 @@ class UserController extends Controller
      * @param Illuminate\Http\Request
      * @return 
      */
-    public function store(Request $request)
+    public function store(RegistrationRequest $request)
     {
         //dd($request->all());
 
@@ -38,7 +39,7 @@ class UserController extends Controller
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password'))
             ]);
-
+/* 
             $address = address::create([
                 'country' => $request->input('country'),
                 'state' => $request->input('state'),
@@ -48,7 +49,9 @@ class UserController extends Controller
                 'address2' => $request->input('address2'),
                 'phone' => $request->input('calling_code')." ".$request->input('phone'),
                 'user_id' => $user->id
-            ]);
+            ]); */
+
+            //attach user to subscribtion
 
             return $user;
         });
@@ -59,4 +62,16 @@ class UserController extends Controller
         return redirect('/success');
     }
 
+    /**
+     * Validate user details
+     *
+     * @param Illuminate\Http\Request
+     * @return Illuminate\Http\Response
+     */
+    public function validateData(RegistrationRequest $request)
+    {
+        return response()->json([
+            'status' => 'success'
+        ]); 
+    }
 }

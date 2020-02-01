@@ -6,6 +6,7 @@ return [
     /* Buttons */
     'buttons' => [
         'adjust_stock' => 'Adjust Stock th',
+        'back_to_login' => 'Back to login th',
         'back_to_shop' => 'Back to shop th',
         'buy' => 'Buy Now th',
         'cancel' => 'Cancel th',
@@ -17,6 +18,7 @@ return [
         'place_order' => 'Place order th',
         'register' => 'Register th',
         'save' => 'Save th',
+        'send_reset_link' => 'Send Password Reset Link th',
         'sent' => 'Sent th',
         'submit' => 'Submit th',
         'subscribe' => 'Subscribe th'
@@ -26,14 +28,11 @@ return [
         'api_keys' => 'API Keys th',
         'basic_info' => 'Basic Info th',
         'country_and_code' => 'Country & Calling Code th',
-        'crypto_address' => ':ticker Address th',
-        'gemini' => 'Gemini th',
         'manage' => 'Manage th',
         'menu' => 'Menu th',
         'order' => 'Order th',
         'order_summary' => 'Order Summary th',
         'payment_info' => 'Payment Information th',
-        'payment_owed' => ':tickerSymbol is still owed th',
         'payment_success' => 'Thank you for your order th',
         'pending_shipment' => 'Pending Shipment th',
         'price' => 'Price th',
@@ -44,7 +43,7 @@ return [
         'shipping_details' => 'Shipping Details th',
         'tracking_info' => 'Tracking Info th',
         'tracking_number' => 'Tracking Number th',
-        'uses_crypto' => 'Payment is made with :ticker, Upon order completion you will be redirected to a confirmation page and recieve a text message on your phone th'
+        'users' => 'Users'
     ],
     /* Input labels and placeholders*/
     'labels' => [
@@ -79,44 +78,43 @@ return [
         'shipping' => 'Shipping th',
         'state' => 'State/Province th',
         'stock' => 'Stock th',
-        'ticker_symbol' => 'BTC th',
         'tracking_number' => 'Tracking Number th',
         'username' => 'Username th',
+        'users' => 'Users'
+    ],
+    /* Mails */
+    'mails' => [
+        'greetings' => 'Hi!',
+        'password_reset' => []
     ],
     /* Notifications */
     'notifications' => [
         'added' => 'was added th',
-        'bad_address' => 'Bad Address, please contact us and let us know you are seeing this message th',
         'created' => 'was created th',
-        'crypto_api_error' => 'Error with API calls & setting :tickerSymbol prices. Please check internet connection and reload page th',
-        'crypto_down' => 'Sorry, Looks like our :tickerSymbol exchange is down th',
         'deleted' => 'was deleted th',
-        'gemini_no_key' => 'You have not entered your Gemini API Keys yet th',
-        'internet_error' => 'Error with the Internet, Please try again th',
-        'keySaved' => 'Your new keys were saved th',
-        'crypto_api_error_e1' => 'Error, Unable to generate :tickerSymbol address, please check internet connection and retry. th',
-        'crypto_api_error_e2' => 'Error, Unable to generate :tickerSymbol address, please check internet connection and retry. th',
+        'key_not_saved' => 'There was an error saving your keys',
+        'key_saved' => 'Your new keys were saved th',
         'not_saved' => 'Data not saved. th',
-        'notSaved' => 'There was an error saving your keys th',
-        'shipmentSent' => 'Shipment sent th',
+        'shipment_sent' => 'Shipment sent th',
+        'stock_adjusted' => 'Stock adjusted th',
         'updated' => 'was updated th',
     ],
     /* SMS messages */
     'sms' => [
-        'shippingCreated' => "Eccomerce here, Your order has been received & we'll update you shortly with tracking information. Order # :productName th",
-        'shippingSent' => "Eccomerce here, Your order #:productName was just sent with :carrier. Tracking # :trackingNumber th"
+        'shipping_created' => "SekaiFarm here, Your order has been received & we'll update you shortly with tracking information. Order # :productName th",
+        'shipping_sent' => "SekaiFarm here, Your order #:productName was just sent with :carrier. Tracking # :trackingNumber th"
     ],
     /* Paragraphs and text */
     'texts' => [
         'already_subscribed' => 'Already subscribed?',
         'cart' => 'Cart th',
+        'change_password' => 'Change Password th',
         'check_payment' => 'Checking Payment, 15 Seconds th',
         'delete_confirm' => 'Are you sure you want to delete th',
         'forgot_password' => 'Forgot your password? th',
         'free' => 'Free th',
         'free_shipping' => 'free shipping th',
         'logout' => 'logout th',
-        'minutes_to_exchange' => ':tickerSymbol may take 10 minutes to confirm th',
         'my_dashboard' => 'My Dashboard th',
         'no_products' => 'There are no products th',
         'no_pending' => 'There are no pending shipments th',
@@ -124,9 +122,7 @@ return [
         'order_number' => 'Order Number: th',
         'per_month' => 'per month',
         'refresh' => "Don't refresh the page th",
-        'seconds_to_confirm' => 'Most wallets take 10 seconds to confirm th',
-        'send_again' => "If you believe this to be an error please click 'Payment Sent' again th",
-        'send_remaining' => "Please send the remaining amount and click 'Payment Sent' th",
+        'reset_password' => 'Reset Password th',
         'shipping_time' => 'Will ship within 48 hours to th',
         'sign_in' => 'Sign In',
         'subscription_success' => 'Subscription Success! th',

@@ -1,10 +1,12 @@
 <template>
     <div class="stock-adjust">
-        <form :method="method" :action="action" ref="form">
+        <form method="post" :action="action" ref="form">
             <button type="button" class="mini ui teal button"  @click="showInput()" v-if="!inputVisible">{{ text }}</button>
             <div class="ui mini icon input mr-5 stock-adjust-wrap" data-children-count="1" v-else>
                 <input type="text" class="stock-adjust__input" name="stock" v-model="stock">
                 <input type="hidden" name="id" :value="productId" />
+                <input type="hidden" name="_token" :value="csrf" />
+                <input type="hidden" name="_method" value="PUT">
                 <i class="circular check teal link icon"  @click="submitForm()"></i>
             </div>
         </form>
@@ -14,9 +16,9 @@
 <script>
     export default {
         props: {
-            method: {
-                type: String,
-                default: 'GET'
+            csrf: {
+                required: true,
+                type: String
             },
             action: {
                 required: true,

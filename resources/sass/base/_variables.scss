@@ -3,7 +3,7 @@
 $colors : (
     red-1: #A70000,
     red-2: #c02121,
-    'blue': #00a8ff,
+    'blue': #2BB6D4,
     'black':#2B2B2B,
     'green': #8AC926,
     'yellow': #F4BC22,
@@ -17,6 +17,8 @@ $colors : (
 $primary : map-get($colors, 'green');
 
 $secondary: map-get($colors, 'yellow'); 
+
+$tertiary: map-get($colors, 'blue');
 
 
 /* BREAK POINTS */

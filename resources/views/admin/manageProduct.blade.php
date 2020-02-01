@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="content">
-            <form  method="POST" action="{{ action('AdminController@create') }}" enctype="multipart/form-data" class="ui form">
+            <form  method="POST" action="{{ route('product.store') }}" enctype="multipart/form-data" class="ui form">
                 @csrf
                 <div class="three fields">
                     <div class="field">
@@ -61,13 +61,16 @@
                                     <div class="ui items">
                                         <div class="item">
                                             <div class="content">
-                                                <form method="GET" action="{{ action('AdminController@productDelete',['id' => $product->id ]) }}" class="ui right floated" onSubmit="return confirm('{{ __('translations.texts.delete_confirm') }} {{ $product->name }}?');">
+                                                <form method="POST" action="{{ route('product.destroy',['id' => $product->id ]) }}" class="ui right floated" onSubmit="return confirm('{{ __('translations.texts.delete_confirm') }} {{ $product->name }}?');">
+                                                    @csrf 
+                                                    <input type="hidden" name="_method" value="DELETE">
                                                     <button class="mini ui red button">{{ __('translations.buttons.delete') }}</button>
                                                 </form>
                                                 <stock-adjust
                                                     class="ui right floated"
+                                                    :csrf="'{{ csrf_token() }}'"
                                                     :quantity="{{ $product->stock }}"
-                                                    :action="'{{ action('AdminController@stock') }}'"
+                                                    :action="'{{ route('product.adjustStock') }}'"
                                                     :product-id="{{ $product->id }}"
                                                     :text="'{{ __('translations.buttons.adjust_stock') }}'">
                                                 </stock-adjust>

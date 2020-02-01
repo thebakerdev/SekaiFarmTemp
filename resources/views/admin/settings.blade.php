@@ -17,17 +17,6 @@
                     <label for="siteName">{{ __('translations.labels.site_name') }}</label>
                     <input id="siteName" type="text" class="input" name="site_name" value="{{ old('site_name',(isset($all_settings['basic_info']['value']['site_name'])) ? $all_settings['basic_info']['value']['site_name'] : '') }}">
                 </div>
-                <h3>{{ __('translations.headings.gemini') }}</h3>
-                <div class="two fields">
-                    <div class="field {{ ($errors->first('gemini_key')) ? 'error' : '' }}">
-                        <label for="geminiKey">{{ __('translations.labels.key') }}</label>
-                        <input id="geminiKey" type="text" class="input" name="gemini_key" value="{{ old('gemini_key',(isset($all_settings['basic_info']['value']['key'])) ? 'CURRENTLY SET' : '') }}">
-                    </div>
-                    <div class="field {{ ($errors->first('gemini_secret')) ? 'error' : '' }}">
-                        <label for="geminiSecret">{{ __('translations.labels.secret') }}</label>
-                        <input id="geminiSecret" type="text" class="input" name="gemini_secret" value="{{ old('gemini_secret',(isset($all_settings['basic_info']['value']['secret'])) ? 'CURRENTLY SET' : '') }}">
-                    </div>
-                </div>
                 <div class="field group">
                     <button class="ui red button right floated" type="submit">{{ __('translations.buttons.save') }}</button>
                 </div>

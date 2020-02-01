@@ -40,12 +40,17 @@
                                 <td class="break-word">{{ $shipment->phone }}</td>
                                 <td>
                                     <div class="group content flex align-right">
-                                        <form method="GET" action="{{ action('AdminController@sent',['id' => $shipment->id]) }}" id="sentForm-{{ $shipment->id }}" class="ui right floated">
-                                            <input type="hidden" class="trackingNumber" name="trackingNumber" value="0">
+                                        <form method="POST" action="{{ route('shipment.sent') }}" id="sentForm-{{ $shipment->id }}" class="ui right floated">
+                                            @csrf
+                                            <input type="hidden" name="_method" value="PUT">
+                                            <input type="hidden" name="shipment_id" value="{{ $shipment->id }}">
+                                            <input type="hidden" class="trackingNumber" name="tracking_number" value="0">
                                             <button class="mini ui teal button sent-button" type="button" data-id="{{ $shipment->id }}">{{ __('translations.buttons.sent') }}</button>
                                         </form>
-                                        <form method="GET" action="{{ action('AdminController@delete') }}" class="ui right floated" onSubmit="return confirm('{{ __('translations.texts.delete_confirm') }} {{ $shipment->name }}');">
-                                            <input type="hidden" name="delete" value="{{ $shipment->id }}" />
+                                        <form method="POST" action="{{ route('shipment.destroy') }}" class="ui right floated" onSubmit="return confirm('{{ __('translations.texts.delete_confirm') }} {{ $shipment->name }}');">
+                                            @csrf
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="shipment_id" value="{{ $shipment->id }}" />
                                             <button class="mini ui red button">{{ __('translations.buttons.delete') }}</button>
                                         </form>
                                     </div>

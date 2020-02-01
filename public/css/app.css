@@ -11,18 +11,26 @@
 }
 
 @font-face {
-  font-family: "Montserrat";
-  src: url(../fonts/Montserrat-Regular.eot?2dd0a1de870af34d48d43b7cad82b8d9);
-  src: local("Montserrat Regular"), local("Montserrat-Regular"), url(../fonts/Montserrat-Regular.eot?2dd0a1de870af34d48d43b7cad82b8d9) format("embedded-opentype"), url(../fonts/Montserrat-Regular.woff2?c7b975f3e8445b8b780e6e2ddc8fdaaa) format("woff2"), url(../fonts/Montserrat-Regular.woff?de4a911e831ca01751ab001a54de34dd) format("woff"), url(../fonts/Montserrat-Regular.ttf?08a754d1d68f4671eab5e11ece77cd03) format("truetype"), url(../fonts/Montserrat-Regular.svg?8869f100393499d23d11f10c504307c3) format("svg");
+  font-family: "Roboto";
+  src: url(../fonts/Roboto-Medium.eot?02aa6e7b39da1ff77803f67452addc43);
+  src: url(../fonts/Roboto-Medium.eot?02aa6e7b39da1ff77803f67452addc43) format("embedded-opentype"), url(../fonts/Roboto-Medium.woff2?50d01d3e6c994995bcaf829e63d53d1a) format("woff2"), url(../fonts/Roboto-Medium.woff?9a3bf7acae14d9b5ed5a88458106b58b) format("woff"), url(../fonts/Roboto-Medium.ttf?b2bcaa52d04bde9a494fd954ef7e7e7b) format("truetype"), url(../fonts/Roboto-Medium.svg?caaae1eff6b52934e2c0453b54724949) format("svg");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../fonts/Roboto-Regular.eot?b9077621ce786b55c176a61456bfc077);
+  src: url(../fonts/Roboto-Regular.eot?b9077621ce786b55c176a61456bfc077) format("embedded-opentype"), url(../fonts/Roboto-Regular.woff2?9feb0110b6dff9ee2b9ebd17f7a1aee6) format("woff2"), url(../fonts/Roboto-Regular.woff?94dac78eee406a8c8f0406b69b85ac2b) format("woff"), url(../fonts/Roboto-Regular.ttf?4312f1fbdcf4d54af4506dabdce08010) format("truetype"), url(../fonts/Roboto-Regular.svg?8528a5484326b3eef06b6dfcc6ce25bd) format("svg");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Montserrat";
-  src: url(../fonts/Montserrat-Medium.eot?f7e77a493f9ba88c23ac9b85609fafc4);
-  src: local("Montserrat Medium"), local("Montserrat-Medium"), url(../fonts/Montserrat-Medium.eot?f7e77a493f9ba88c23ac9b85609fafc4) format("embedded-opentype"), url(../fonts/Montserrat-Medium.woff2?ce792ace742f8cf0c8c48b6eecc16a32) format("woff2"), url(../fonts/Montserrat-Medium.woff?d194e50992ca40d4752c6649f8684575) format("woff"), url(../fonts/Montserrat-Medium.ttf?41940db30d513f31c9adbf15f4a98a76) format("truetype"), url(../fonts/Montserrat-Medium.svg?d40e3cbfb5a9bd598d15457c4741db9e) format("svg");
-  font-weight: 500;
+  font-family: "Roboto";
+  src: url(../fonts/Roboto-Bold.eot?4a1d8c27dac2c1bdee46fcfb5c80089b);
+  src: url(../fonts/Roboto-Bold.eot?4a1d8c27dac2c1bdee46fcfb5c80089b) format("embedded-opentype"), url(../fonts/Roboto-Bold.woff2?f3a02e2578bee50e620e515912278bc9) format("woff2"), url(../fonts/Roboto-Bold.woff?08cb8f79715774f9a6285ee7db2919a3) format("woff"), url(../fonts/Roboto-Bold.ttf?16d7bb99c6f81cacdd91cd92d8ddb545) format("truetype"), url(../fonts/Roboto-Bold.svg?11d561629449a066ce04bd4c8d4f0366) format("svg");
+  font-weight: bold;
   font-style: normal;
 }
 
@@ -156,11 +164,16 @@ label {
 
 .button {
   border-radius: 5px !important;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16) !important;
   color: #ffffff !important;
   font-family: "Roboto", sans-serif !important;
   font-weight: 700 !important;
   -webkit-transition: all 0.3s ease !important;
   transition: all 0.3s ease !important;
+}
+
+.button:hover {
+  box-shadow: none !important;
 }
 
 .button--primary {
@@ -295,12 +308,23 @@ label {
   }
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .site-header {
   padding: 26px 0 11px !important;
 }
 
 .site-name a {
-  color: #2B2B2B;
+  color: #2BB6D4;
   cursor: pointer;
   letter-spacing: 0.05em;
   font-family: "Montserrat", sans-serif !important;
@@ -374,33 +398,74 @@ label {
   width: 25px;
 }
 
+.user-registration__subscription-total {
+  background-color: #F4BC22;
+  border-radius: 5px;
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+}
+
+.user-registration__actions {
+  text-align: center;
+}
+
+.user-registration__actions button {
+  margin-right: 0 !important;
+  margin-bottom: 1rem !important;
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .user-registration__actions {
+    text-align: left;
+  }
+
+  .user-registration__actions button {
+    margin-right: 1rem !important;
+    width: auto;
+  }
+}
+
 .ui.modal .content {
   padding: 2.5rem 1.5rem 1.8rem !important;
 }
 
-.login__title {
+.user-auth__title {
   color: #8AC926 !important;
-  font-size: 32px !important;
+  font-size: 28px !important;
   text-align: center;
 }
 
-.login__actions {
+.user-auth__message {
+  color: white;
+  border-radius: 5px;
   display: -webkit-box;
   display: flex;
+  -webkit-box-pack: justify;
+          justify-content: space-between;
+  padding: 10px;
 }
 
-.login__actions button {
+.user-auth__message--success {
+  background-color: #2BB6D4;
+}
+
+.user-auth__message i {
+  cursor: pointer;
+}
+
+.user-auth__actions {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: justify;
+          justify-content: space-between;
+}
+
+.user-auth__actions button {
   margin: 0;
   -webkit-box-flex: 1;
           flex: 1;
-}
-
-.login__actions button:first-child {
-  margin-right: 10px;
-}
-
-.login__actions button:last-child {
-  margin-left: 10px;
 }
 
 .order-summary {
@@ -477,28 +542,6 @@ label {
   width: 100%;
 }
 
-.product__action {
-  text-align: center;
-}
-
-.product__action #subscribe_btn {
-  display: none;
-}
-
-.product__action button {
-  margin-right: 0 !important;
-  margin-bottom: 1rem !important;
-  width: 100%;
-}
-
-.product__total {
-  background-color: #F4BC22;
-  border-radius: 5px;
-  color: #fff;
-  padding: 12px;
-  text-align: center;
-}
-
 @media screen and (min-width: 768px) {
   .product__name {
     font-size: 48px;
@@ -507,15 +550,6 @@ label {
 
   .product__info {
     text-align: left;
-  }
-
-  .product__action {
-    text-align: left;
-  }
-
-  .product__action button {
-    margin-right: 1rem !important;
-    width: auto;
   }
 }
 
@@ -610,7 +644,7 @@ label {
 }
 
 .color--blue {
-  color: #00a8ff !important;
+  color: #2BB6D4 !important;
 }
 
 .color--black {
@@ -654,7 +688,7 @@ label {
 }
 
 .bg--blue {
-  background-color: #00a8ff !important;
+  background-color: #2BB6D4 !important;
 }
 
 .bg--black {

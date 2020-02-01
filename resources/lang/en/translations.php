@@ -6,6 +6,7 @@ return [
     /* Buttons */
     'buttons' => [
         'adjust_stock' => 'Adjust Stock',
+        'back_to_login' => 'Back to login',
         'back_to_shop' => 'Back to shop',
         'buy' => 'Buy Now',
         'cancel' => 'Cancel',
@@ -17,6 +18,7 @@ return [
         'place_order' => 'Place order',
         'register' => 'Register',
         'save' => 'Save',
+        'send_reset_link' => 'Send Password Reset Link',
         'sent' => 'Sent',
         'submit' => 'Submit',
         'subscribe' => 'Subscribe'
@@ -26,14 +28,11 @@ return [
         'api_keys' => 'API Keys',
         'basic_info' => 'Basic Info',
         'country_and_code' => 'Country & Calling Code',
-        'crypto_address' => ':ticker Address',
-        'gemini' => 'Gemini',
         'manage' => 'Manage',
         'menu' => 'Menu',
         'order' => 'Order',
         'order_summary' => 'Order Summary',
         'payment_info' => 'Payment Information',
-        'payment_owed' => ':tickerSymbol is still owed',
         'payment_success' => 'Thank you for your order',
         'pending_shipment' => 'Pending Shipment',
         'price' => 'Price',
@@ -44,7 +43,7 @@ return [
         'shipping_details' => 'Shipping Details',
         'tracking_info' => 'Tracking Info',
         'tracking_number' => 'Tracking Number',
-        'uses_crypto' => 'Payment is made with :ticker, Upon order completion you will be redirected to a confirmation page and recieve a text message on your phone'
+        'users' => 'Users'
     ],
     /* Input labels and placeholders*/
     'labels' => [
@@ -79,44 +78,47 @@ return [
         'shipping' => 'Shipping',
         'state' => 'State/Province',
         'stock' => 'Stock',
-        'ticker_symbol' => 'BTC',
         'tracking_number' => 'Tracking Number',
-        'username' => 'Username',
+        'username' => 'Username'
+    ],
+    /* Mails */
+    'mails' => [
+        'greetings' => 'Hi!',
+        'password_reset' => [
+            'action' => 'Reset Password',
+            'intro' => 'You are receiving this email because we received a password reset request for your account.',
+            'line1' => 'This password reset link will expire in 60 minutes.',
+            'line2' => 'If you did not request a password reset, no further action is required.',
+        ]
     ],
     /* Notifications */
     'notifications' => [
         'added' => 'was added',
-        'bad_address' => 'Bad Address, please contact us and let us know you are seeing this message',
         'created' => 'was created',
-        'crypto_api_error' => 'Error with API calls & setting :tickerSymbol prices. Please check internet connection and reload page',
-        'crypto_down' => 'Sorry, Looks like our :tickerSymbol exchange is down',
         'deleted' => 'was deleted',
-        'gemini_no_key' => 'You have not entered your Gemini API Keys yet',
-        'internet_error' => 'Error with the Internet, Please try again',
-        'keySaved' => 'Your new keys were saved',
-        'crypto_api_error_e1' => 'Error, Unable to generate :tickerSymbol address, please check internet connection and retry.',
-        'crypto_api_error_e2' => 'Error, Unable to generate :tickerSymbol address, please check internet connection and retry.',
+        'key_not_saved' => 'There was an error saving your keys',
+        'key_saved' => 'Your new keys were saved',
         'not_saved' => 'Data not saved.',
-        'notSaved' => 'There was an error saving your keys',
-        'shipmentSent' => 'Shipment sent',
+        'shipment_sent' => 'Shipment sent',
+        'stock_adjusted' => 'Stock adjusted',
         'updated' => 'was updated',
     ],
     /* SMS messages */
     'sms' => [
-        'shippingCreated' => "Eccomerce here, Your order has been received & we'll update you shortly with tracking information. Order # :productName",
-        'shippingSent' => "Eccomerce here, Your order #:productName was just sent with :carrier. Tracking # :trackingNumber"
+        'shipping_created' => "SekaiFarm here, Your order has been received & we'll update you shortly with tracking information. Order # :productName",
+        'shipping_sent' => "SekaiFarm here, Your order #:productName was just sent with :carrier. Tracking # :trackingNumber"
     ],
     /* Paragraphs and text */
     'texts' => [
         'already_subscribed' => 'Already subscribed?',
         'cart' => 'Cart',
+        'change_password' => 'Change Password',
         'check_payment' => 'Checking Payment, 15 Seconds',
         'delete_confirm' => 'Are you sure you want to delete',
         'forgot_password' => 'Forgot your password?',
         'free' => 'Free',
         'free_shipping' => 'free shipping',
         'logout' => 'logout',
-        'minutes_to_exchange' => ':tickerSymbol may take 10 minutes to confirm',
         'my_dashboard' => 'My Dashboard',
         'no_products' => 'There are no products',
         'no_pending' => 'There are no pending shipments',
@@ -124,9 +126,7 @@ return [
         'order_number' => 'Order Number:',
         'per_month' => 'per month',
         'refresh' => "Don't refresh the page",
-        'seconds_to_confirm' => 'Most wallets take 10 seconds to confirm',
-        'send_again' => "If you believe this to be an error please click 'Payment Sent' again",
-        'send_remaining' => "Please send the remaining amount and click 'Payment Sent'",
+        'reset_password' => 'Reset Password',
         'shipping_time' => 'Will ship within 48 hours to',
         'sign_in' => 'Sign In',
         'subscription_success' => 'Subscription Success!',

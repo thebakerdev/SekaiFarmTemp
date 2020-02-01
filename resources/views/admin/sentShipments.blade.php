@@ -41,8 +41,10 @@
                                 <td class="break-word">{{ $shipment->address2 }}</td>
                                 <td class="break-word">{{ $shipment->phone }}</td>
                                 <td class="group">
-                                    <form method="GET" action="{{ action('AdminController@delete') }}" class="ui right floated" onSubmit="return confirm('{{ __('translations.texts.delete_confirm') }} {{ $shipment->name }}');">
-                                        <input type="hidden" name="delete" value="{{ $shipment->id }}" />
+                                    <form method="POST" action="{{ route('shipment.destroy') }}" class="ui right floated" onSubmit="return confirm('{{ __('translations.texts.delete_confirm') }} {{ $shipment->name }}');">
+                                        @csrf
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="shipment_id" value="{{ $shipment->id }}" />
                                         <button class="mini ui red button">{{ __('translations.buttons.delete') }}</button>
                                     </form>
                                 </td>

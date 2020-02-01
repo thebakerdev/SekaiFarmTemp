@@ -4,14 +4,19 @@
             <div id="card_element">
                 <!-- Stripe element will be inserted here -->
             </div>
+            <div class="p-h StripeElement--error ui red" v-if="error.show === true && error.message !== ''"><small>{{ error.message }}</small></div>
         </div>
     </div>
 </template>
 <script>
     export default {
         props: {
-            client_secret: {
+            clientSecret: {
                 type: String,
+                required: true
+            },
+            paymentData: {
+                type: Object,
                 required: true
             },
             stripeKey: {
@@ -23,11 +28,30 @@
             return {
                 card: '',
                 elements: '',
+                error: {
+                    message: '',
+                    show: false
+                },
                 stripe: '' //stripe instance,
             }
         },
         methods: {
+            confirmCardSetup() {
+
+                return this.stripe.confirmCardSetup(
+                     this.clientSecret, 
+                     {
+                        payment_method: {
+                            card: this.card,
+                            billing_details: { name: this.paymentData.name}
+                        }
+                    }
+                );
+            },
+            /* Initialize stripe input */
             initializeStripe() {
+
+                const vm = this;
 
                 this.stripe = Stripe(this.stripeKey);
 
@@ -54,7 +78,27 @@
                 this.card = this.elements.create('card');
 
                 this.card.mount('#card_element');
-            }
+
+                this.card.on('change', function(event) {
+
+                    if (event.complete === true) {
+                        vm.error.show = false;
+                        vm.error.message = '';
+                    } else {
+                        vm.error.show = true;
+                    }
+                });
+            },
+            triggerCardError(message = null) {
+
+                if (message != null) {
+                    this.error.message = message;
+                }
+                
+                this.error.show = true;
+
+                $('#card_element').addClass('StripeElement--invalid');
+            },
         },
         mounted() {
 

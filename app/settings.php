@@ -4,42 +4,46 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class settings extends Model {
-    
-  protected $fillable = ['key', 'value'];
+class settings extends Model
+{
 
-  protected $casts = [
-    'value' => 'json',
-  ];
+    protected $fillable = ['key', 'value'];
 
-  public function scopeGetAll() {
-    return settings::all()->keyBy('key');
-  }
+    protected $casts = [
+        'value' => 'json',
+    ];
 
-  public function scopeGetSetting($query, $key) {
-    $setting = $query->where('key', $key)->first();
-
-    if ($setting != null) {
-      return $setting->value;
+    public function scopeGetAll()
+    {
+        return settings::all()->keyBy('key');
     }
 
-    return false;
-  }
+    public function scopeGetSetting($query, $key)
+    {
+        $setting = $query->where('key', $key)->first();
 
-  public function scopeUpdateSettings($query, $key, $data) {
-    $setting = $query->where('key', $key)->first();
+        if ($setting != null) {
+            return $setting->value;
+        }
 
-    if ($setting != null) {
-
-      $setting->value = $data;
-
-      $setting->save();
-    } else {
-
-      self::create([
-        'key' => $key,
-        'value' => $data,
-      ]);
+        return false;
     }
-  }
+
+    public function scopeUpdateSettings($query, $key, $data)
+    {
+        $setting = $query->where('key', $key)->first();
+
+        if ($setting != null) {
+
+            $setting->value = $data;
+
+            $setting->save();
+        } else {
+
+            self::create([
+                'key' => $key,
+                'value' => $data,
+            ]);
+        }
+    }
 }
