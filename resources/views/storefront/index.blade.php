@@ -52,7 +52,8 @@
                                 :validation-url="'{{ route('user.validate') }}'"
                                 :stripe-key="'{{ $stripe_key }}'" 
                                 :client-secret="'{{ $payment_intent->client_secret}}'"
-                                :product="product">
+                                :product="product"
+                                :countries="{{ json_encode($supported_countries) }}">
                             </user-registration>
                         @else
                             <a href="{{ route('user.index') }}" class="ui button button--secondary">{{ trans('translations.buttons.go_to_dashboard') }}</a>
@@ -108,9 +109,7 @@
                 $('#subscribe_btn').fadeIn();
             });
 
-            $('.show_login_btn').click(function() {
-                $('#login_modal').modal('show');
-            });
+            
         });
 
         /* Returns calling code value */

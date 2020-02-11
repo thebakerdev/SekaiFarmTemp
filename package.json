@@ -23,6 +23,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "form-backend-validation": "^2.3.9"
+        "form-backend-validation": "^2.3.9",
+        "vue-imask": "^6.0.1"
     }
 }

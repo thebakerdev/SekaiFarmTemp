@@ -1,17 +1,15 @@
 /* COLORS */
 
 $colors : (
-    red-1: #A70000,
-    red-2: #c02121,
+    'black':#505050,
     'blue': #2BB6D4,
-    'black':#2B2B2B,
     'green': #8AC926,
+    'red': #DF3C3C,
     'yellow': #F4BC22,
-    grey-1: #E7E7E7, 
-    grey-2: #EFEFEF,
-    grey-3: #F7F7F7,
-    grey-4: #C4C4C4,
-    grey-5: #9B9B9B
+    'grey-1': #F4F2F2,
+    'grey-2': #F2F2F2,
+    'grey-3': #E0E0E0,
+    'grey-4': #5E5E5E,
 );
 
 $primary : map-get($colors, 'green');

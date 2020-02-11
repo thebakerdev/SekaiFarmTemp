@@ -38,7 +38,7 @@ class IndexController extends Controller
 
         session(['product' => $product->toArray()]);
 
-        $supported_countries = country::orderBy('name', 'asc')->get();
+        $supported_countries = config('dropdowns.countries_asean');
 
         return view('storefront.index', compact('product', 'supported_countries','payment_intent','stripe_key'));
     }

@@ -14,12 +14,12 @@ class UserController extends Controller
 {
     public function __construct() 
     {
-        $this->middleware('auth')->except(['store','validateData']);
+        $this->middleware('auth')->except(['store','validateData','index']);
     }
 
     public function index()
     {
-        return "this is the user index";
+        return view('user.orders');
     }
 
     /**
