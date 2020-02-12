@@ -4,7 +4,7 @@
         <user-auth 
             :login-action="'{{ route('user.login.login') }}'"
             :forgot-password-action="'{{ route('user.password.link') }}'" 
-            :redirect-to="'{{ route('user.index') }}'">
+            :redirect-to="'{{ route('user.orders.index') }}'">
         </user-auth>
     </div>
 </div>

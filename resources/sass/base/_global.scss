@@ -4,6 +4,7 @@ body {
     font-size: 16px;
     font-style: normal;
     font-weight: normal;
+    line-height: 1.6 !important;
 }
 
 h1,h2,h3,h4,h5 {
@@ -15,8 +16,16 @@ label {
     font-weight: 500 !important;
 }
 
+address {
+    font-style: normal;
+}
+
 [v-cloak] {
     display: none;
+}
+
+.c-pointer {
+    cursor: pointer;
 }
 
 // SVG Fallback
@@ -56,6 +65,10 @@ label {
     content: "";
     display: table;
     clear: both;
+}
+
+.w-50 {
+    width: 50%;
 }
 
 .panel {

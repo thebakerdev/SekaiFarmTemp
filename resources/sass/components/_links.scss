@@ -1,0 +1,21 @@
+.link {
+    font-weight: 500 !important;
+
+    &--primary {
+        color: $primary;
+
+        &:hover,
+        &:active {
+            color: darken($primary,10%);
+        }
+    }
+
+    &--secondary {
+        color: $secondary;
+
+        &:hover,
+        &:active {
+            color: darken($secondary,10%);
+        }
+    }
+}

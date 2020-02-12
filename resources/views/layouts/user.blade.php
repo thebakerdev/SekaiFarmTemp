@@ -59,10 +59,10 @@
                                 <aside class="user-dashboard__sidebar panel">
                                     <h3 class="user-dashboard__sidebar-title text-uppercase">Menu</h3>
                                     <ul class="user-dashboard__sidebar-links p-0">
-                                        <li class="active"><a href="#"><i class="box icon"></i> Orders</a></li>
-                                        <li><a href="#"><i class="credit card outline icon"></i> Subscription</a></li>
-                                        <li><a href="#"><i class="user circle outline icon"></i> Account</a></li>
-                                        <li class="mb-0"><a href="#"><i class="home icon"></i> Address</a></li>
+                                        <li class="{{ Request::segment(1)=='orders' ? 'active':'' }}"><a href="{{ route('user.orders.index') }}"><i class="box icon"></i> Orders</a></li>
+                                        <li class="{{ Request::segment(1)=='subscription' ? 'active':'' }}"><a href="{{ route('user.subscription.index') }}"><i class="credit card outline icon"></i> Subscription</a></li>
+                                        <li class="{{ Request::segment(1)=='account' ? 'active':'' }}"><a href="{{ route('user.account.index') }}"><i class="user circle outline icon"></i> Account</a></li>
+                                        <li class="{{ Request::segment(1)=='address' ? 'active mb-0':'mb-0' }}"><a href="{{ route('user.address.index') }}"><i class="home icon"></i> Address</a></li>
                                     </ul>
                                 </aside>
                                 <section class="user-dashboard__content panel">

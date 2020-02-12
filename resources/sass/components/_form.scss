@@ -12,3 +12,29 @@
         }
     }
 }
+
+.form-display {
+
+    .field {
+        display: flex;
+        margin-bottom: 1rem;
+    }
+
+    .field__item {
+        flex: 1;
+    }
+}
+
+@include mq(sm) {
+    .form-display {
+        .field {
+            display: block;
+            margin-bottom: 1rem;
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+        }
+    }
+}

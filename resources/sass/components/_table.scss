@@ -16,20 +16,78 @@
 }
 
 .table-custom {
-    border-collapse: collapse;
-    width: 100%;
+    border: 1px solid map-get($colors, 'grey-1');
+    border-radius: 5px;
+    display: flex;
+    font-size: 14px !important;
+    position: relative;
 
-    thead tr th {
-        border-bottom: solid 1px map-get($colors, 'grey-2');
+    thead {
+		left: -9999px;
+        position: absolute;
+        top: -9999px;
     }
 
-    tr th,
-    tr td {
-        padding: 10px 16px;
+    tbody {
+        width: 100%;
+
+        tr:hover {
+            background-color: map-get($colors, 'light-blue');
+        }
     }
 
-    & .spacer {
-        padding: 0 0 12px;
+    tr {
+        border-bottom: 1px solid map-get($colors, 'grey-1');
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        width: 100%;
+
+        & td:first-child {
+            padding-top: 5px;
+        }
+
+        & td:last-child {
+            padding-bottom: 5px;
+        }
+
+        &:last-child {
+            border: none;
+        }
+    }
+    
+    td, th {
+        display: flex;
+        flex: 1;
+        padding: 5px 16px;
+
+        &.spacer {
+            display: none;
+        }
+
+        &.align-center {
+            text-align: left;
+        }
+    }
+
+    tr td:before {
+        content: attr(data-header);
+        flex-basis: 50%;
+        flex-grow: 0;
+        font-weight: bold;
+    }
+
+    &--borderless {
+        border: none;
+
+        tr, td, th {
+            border: none;
+        }
+    }
+
+    &--spaced {
+        border-collapse:separate !important; 
+        border-spacing:0 16px !important; 
     }
 }
 
@@ -40,6 +98,24 @@
         background-color: $secondary;
         box-shadow: 2px 2px 10px -10px rgba(124, 124, 124, 0.1);
     }
+
+    & td:first-child { 
+        border-top-left-radius: 5px; 
+        border-top-right-radius: 5px; 
+        padding-bottom: 8px !important;
+    }
+
+    & td:last-child {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        padding-bottom: 10px !important;
+    }
+}
+
+.table-custom__row--raised {
+    box-shadow: 2px 2px 10px rgba(124, 124, 124, 0.1);
+    margin-bottom: 16px;
+    padding: 10px 0;
 
     & td:first-child { 
         border-top-left-radius: 5px; 
@@ -56,7 +132,97 @@
     & td:last-child {
         border-bottom-right-radius: 5px;
     }
+
+    &.active {
+        background-color: map-get($colors,'grey-5');
+    }
+
+    &::last-child {
+        margin-bottom: 0;
+    }
 }
+
+@include mq(sm) {
+    .table-custom {
+        border-collapse: collapse;
+        display: table;
+        position: relative;
+        width: 100%;
+
+        thead {
+            position: static;
+        }
+
+        thead tr th {
+            border-bottom: solid 1px map-get($colors, 'grey-2');
+        }
+    
+        tr {
+            display: table-row;
+            flex: 1;
+
+            & td:last-child {
+                padding-bottom: 10px;
+            }
+        }
+        
+        td,
+        th {
+            display: table-cell;
+            padding: 10px 16px;
+
+            &:first-child {
+                padding-top: 10px !important;
+            }
+    
+            &:last-child {
+                padding-bottom: 10px;
+            }
+
+            &.spacer {
+                display: table-cell;
+            }
+
+            &.align-center {
+                text-align: center;
+            }
+        }
+
+    
+        tr td:before {
+            content: '';
+        }
+    
+        &--borderless-sm {
+            border: none;
+    
+            tr, td, th {
+                border: none;
+            }
+        }
+    }
+
+    .table-custom__row--highlight {
+    
+        & td:first-child { 
+            border-top-left-radius: 5px; 
+            border-top-right-radius: 0; 
+        }
+    
+        & td:last-child { 
+            border-top-right-radius: 5px; 
+        }
+    
+        & td:first-child {
+            border-bottom-left-radius: 5px;
+        }
+    
+        & td:last-child {
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 0;
+        }
+    }
+} 
 
 @media (max-width:1136px) {
 

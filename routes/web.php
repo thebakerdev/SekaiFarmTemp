@@ -68,7 +68,11 @@ Route::get('/bluelogin/register', 'Auth\Admin\RegisterController@index')->name('
 
 
 // User routes
-Route::get('/orders', 'UserController@index')->name('user.index');
+Route::get('/orders', 'UserOrderController@index')->name('user.orders.index');
+Route::get('/address', 'AddressController@index')->name('user.address.index');
+Route::get('/account', 'UserController@index')->name('user.account.index');
+Route::get('/subscription', 'SubscriptionController@index')->name('user.subscription.index');
+
 Route::post('/user/login', 'Auth\LoginController@login')->name('user.login.login');
 Route::get('/user/logout', 'Auth\LoginController@logout')->name('user.login.logout');
 Route::post('/user/register','UserController@store')->name('user.store');

@@ -26,8 +26,20 @@
         }
     }
 
+    &--danger {
+        background: $danger !important;
+
+        &:hover {
+            background: darken($danger,8%) !important;   
+        }
+    }
+
     &--fixed {
         max-width: 260px !important;
+        width: 100%;
+    }
+
+    &--fluid {
         width: 100%;
     }
 }
