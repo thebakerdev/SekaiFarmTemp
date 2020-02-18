@@ -1,19 +1,19 @@
 @extends('layouts.user')
 
-@section('page-title', 'Step')
+@section('page-title', trans('translations.labels.orders'))
 
 @section('content')
     <div class="user-dashboard__content-inner user-orders">
-        <h3 class="user-dashboard__content-heading">Orders</h3>
+        <h3 class="user-dashboard__content-heading">{{ trans('translations.labels.orders') }}</h3>
         <div class="user-orders__pending mb-3">
-            <h4 class="user-dashboard__content-subheading">Pending</h4>
+            <h4 class="user-dashboard__content-subheading">{{ trans('translations.headings.pending') }}</h4>
             <table role="table" class="table-custom table-custom--borderless">
                 <thead role="rowgroup">
                     <tr role="row">
-                        <th role="columnheader">Order #</th>
-                        <th role="columnheader" class="align-center">Quantity</th>
-                        <th role="columnheader">Courier</th>
-                        <th role="columnheader">Delivery Date</th>
+                        <th role="columnheader">{{ trans('translations.labels.order') }} #</th>
+                        <th role="columnheader" class="align-center">{{ trans('translations.labels.quantity') }}</th>
+                        <th role="columnheader">{{ trans('translations.labels.courier') }}</th>
+                        <th role="columnheader">{{ trans('translations.labels.delivery_date') }}</th>
                     </tr>
                 </thead>
                 <tbody class="rowgroup">
@@ -31,10 +31,10 @@
             <table role="table" class="table-custom table-custom--borderless-sm">
                 <thead role="rowgroup">
                     <tr role="row">
-                        <th role="columnheader">Order #</th>
-                        <th role="columnheader" class="align-center">Quantity</th>
-                        <th role="columnheader">Courier</th>
-                        <th role="columnheader">Delivery Date</th>
+                        <th role="columnheader">{{ trans('translations.labels.order') }} #</th>
+                        <th role="columnheader" class="align-center">{{ trans('translations.labels.quantity') }}</th>
+                        <th role="columnheader">{{ trans('translations.labels.courier') }}</th>
+                        <th role="columnheader">{{ trans('translations.labels.date_delivered') }}</th>
                     </tr>
                 </thead>
                 <tbody role="rowgroup">

@@ -30,24 +30,17 @@
     </style>
 </head>
 <body>
-    <div id="app" class="site-wrapper ht-100">
+    <div id="app-user" class="site-wrapper ht-100">
         <div class="main-content">
-            <header class="site-header ui container grid">
+            <header class="site-header ui container grid pb-2">
                 <div class="row centered">
                     <div class="eight wide mobile seven wide tablet seven wide computer column">
                         <h1 class="site-name"><a href="{{ URL::to('/') }}">Sekai<span>Farm</span></a></h1>
                     </div>
                     <div class="eight wide mobile seven wide tablet seven wide computer column middle aligned text-right">
-                        @if(Route::getCurrentRoute()->uri() == '/')
-                            <!-- <span id="show-cart-button" class="cart-link"><i class="large shopping cart icon"></i><span class="cart-link__count" v-if="qty.length" v-cloak>@{{ qty }}</span></span> -->
-                            @if (null)
-                                <button class="ui tiny primary button button--secondary show_login_btn">{{ __('translations.texts.sign_in') }}</button>
-                            @else
-                                <div class="user__menu">
-                                    <i class="ui icon user circle outline color--green"></i><a href="{{ route('user.index') }}" class="mr-1">{{ trans('translations.texts.my_dashboard') }}</a><a href="{{ route('user.login.logout') }}">{{ trans('translations.texts.logout') }}</a>
-                                </div>
-                            @endif
-                        @endif
+                        <div class="user__menu">
+                            <i class="ui icon user circle outline color--green"></i><strong class="mr-1">{{ auth()->user()->email }}</strong><a href="{{ route('user.login.logout') }}">{{ trans('translations.texts.logout') }}</a>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -57,19 +50,18 @@
                         <div class="sixteen wide mobile fourteen wide tablet fourteen wide computer column">
                             <div class="user-dashboard ht-100">
                                 <aside class="user-dashboard__sidebar panel">
-                                    <h3 class="user-dashboard__sidebar-title text-uppercase">Menu</h3>
+                                    <h3 class="user-dashboard__sidebar-title text-uppercase">{{ trans('translations.headings.menu') }}</h3>
                                     <ul class="user-dashboard__sidebar-links p-0">
-                                        <li class="{{ Request::segment(1)=='orders' ? 'active':'' }}"><a href="{{ route('user.orders.index') }}"><i class="box icon"></i> Orders</a></li>
-                                        <li class="{{ Request::segment(1)=='subscription' ? 'active':'' }}"><a href="{{ route('user.subscription.index') }}"><i class="credit card outline icon"></i> Subscription</a></li>
-                                        <li class="{{ Request::segment(1)=='account' ? 'active':'' }}"><a href="{{ route('user.account.index') }}"><i class="user circle outline icon"></i> Account</a></li>
-                                        <li class="{{ Request::segment(1)=='address' ? 'active mb-0':'mb-0' }}"><a href="{{ route('user.address.index') }}"><i class="home icon"></i> Address</a></li>
+                                        <li class="{{ Request::segment(1)=='orders' ? 'active':'' }}"><a href="{{ route('user.orders.index') }}"><i class="box icon"></i> {{ trans('translations.labels.orders') }}</a></li>
+                                        <li class="{{ Request::segment(1)=='subscription' ? 'active':'' }}"><a href="{{ route('user.subscription.index') }}"><i class="credit card outline icon"></i> {{ trans('translations.headings.subscription') }}</a></li>
+                                        <li class="{{ Request::segment(1)=='account' ? 'active':'' }}"><a href="{{ route('user.account.index') }}"><i class="user circle outline icon"></i> {{ trans('translations.headings.account') }}</a></li>
+                                        <li class="{{ Request::segment(1)=='address' ? 'active mb-0':'mb-0' }}"><a href="{{ route('user.address.index') }}"><i class="home icon"></i> {{ trans('translations.labels.address') }}</a></li>
                                     </ul>
                                 </aside>
                                 <section class="user-dashboard__content panel">
                                     @yield('content')
                                 </section>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -78,14 +70,20 @@
         <footer class="footer ui container">
             @include('partials.user.footer')
         </footer>
+        <notifications group="user-notification"
+                   position="top right"
+                   :max="1"
+                   :width="310"
+                   :ignore-duplicates="true"
+                   :speed="600" />
         <input type="hidden" ref="baseUrl" value="{{ url('/') }}">
-        @include('layouts.modals.loginModal')
     </div>
        
     <script src="{{ asset('js/jquery.3.3.1.min.js') }}"></script>
     <script src="{{ asset('js/semantic.min.js') }}"></script>
     @yield('page-script-before')
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ route('locale.localizeForJs') }}"></script>
+    <script src="{{ asset('js/app-user.js') }}" defer></script>
     @yield('page-script-after')
    
 </body>

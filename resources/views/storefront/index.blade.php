@@ -56,7 +56,7 @@
                                 :countries="{{ json_encode($supported_countries) }}">
                             </user-registration>
                         @else
-                            <a href="{{ route('user.index') }}" class="ui button button--secondary">{{ trans('translations.buttons.go_to_dashboard') }}</a>
+                            <a href="{{ route('user.orders.index') }}" class="ui button button--secondary">{{ trans('translations.buttons.go_to_dashboard') }}</a>
                         @endif
                     </div>
                 </div>

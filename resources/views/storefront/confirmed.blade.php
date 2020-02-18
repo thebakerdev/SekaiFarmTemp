@@ -18,7 +18,7 @@
                         <td class="text-right"><strong>$300</strong></td>
                     </tr>
                 </table>
-                <a href="{{ route('user.index') }}" class="ui button button--secondary mt-2">{{ trans('translations.buttons.go_to_dashboard') }}</a>
+                <a href="{{ route('user.orders.index') }}" class="ui button button--secondary mt-2">{{ trans('translations.buttons.go_to_dashboard') }}</a>
             </div>
         </div>
     </div>

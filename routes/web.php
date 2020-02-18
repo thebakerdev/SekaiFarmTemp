@@ -22,8 +22,9 @@ Route::middleware(['localizebybrowser'])->group(function() {
 
     // Product Routes
     Route::post('/product/store', 'ProductController@store')->name('product.store');
-    Route::delete('/product/delete/{id}', 'ProductController@destroy')->name('product.destroy');
+    Route::put('/product/update', 'ProductController@update')->name('product.update');
     Route::put('/product/adjust-stock', 'ProductController@adjustStock')->name('product.adjustStock');
+    Route::delete('/product/delete/{id}', 'ProductController@destroy')->name('product.destroy');
 
     // Shipment Routes
     Route::put('/shipment/sent', 'ShipmentController@sent')->name('shipment.sent');
@@ -69,8 +70,15 @@ Route::get('/bluelogin/register', 'Auth\Admin\RegisterController@index')->name('
 
 // User routes
 Route::get('/orders', 'UserOrderController@index')->name('user.orders.index');
+
 Route::get('/address', 'AddressController@index')->name('user.address.index');
+Route::post('/address/store', 'AddressController@store')->name('user.address.store');
+Route::put('/address/set-default', 'AddressController@setDefault')->name('user.addres.setDefault');
+
 Route::get('/account', 'UserController@index')->name('user.account.index');
+Route::put('/account/update', 'UserController@update')->name('user.account.update');
+Route::put('/account/change-password', 'UserController@changePassword')->name('user.account.changePassword');
+
 Route::get('/subscription', 'SubscriptionController@index')->name('user.subscription.index');
 
 Route::post('/user/login', 'Auth\LoginController@login')->name('user.login.login');

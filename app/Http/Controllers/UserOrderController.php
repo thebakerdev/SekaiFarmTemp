@@ -13,13 +13,13 @@ class UserOrderController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
     
     /**
      * Displays user address list
      *
-     * @return 
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function index()
     {

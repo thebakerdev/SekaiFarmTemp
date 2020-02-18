@@ -14,6 +14,7 @@ const mix = require('laravel-mix');
 mix.setPublicPath('public')
    .setResourceRoot('../')
    .js('resources/js/app.js', 'public/js')
+   .js('resources/js/app-user.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css')
    .browserSync({
         proxy: 'http://127.0.0.1:8000'

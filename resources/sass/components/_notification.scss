@@ -1,0 +1,25 @@
+.vue-notification-group {
+    padding: 0 !important;
+}
+
+.vue-notification {
+    margin: 10px 15px 5px 0 !important;
+  
+    background: $primary !important;
+    border-left: 5px solid darken($primary,10%) !important;
+  
+    &.warn {
+      background: $secondary !important;
+      border-left-color: darken($secondary,10%) !important;
+    }
+  
+    &.error {
+      background: $danger !important;
+      border-left-color: darken($danger,10%) !important;
+    }
+  
+    &.success {
+      background: $tertiary !important;
+      border-left-color: darken($tertiary,10%) !important;
+    }
+  }

@@ -22,8 +22,8 @@
                         <input type="text" id="price" class="input" name="price" value="{{ old('price') }}">
                     </div>
                     <div class="field">
-                        <label for="price">{{ __('translations.labels.stock') }}</label>
-                        <input type="text" id="price" class="input" name="stock" value="{{ old('stock') }}">
+                        <label for="stock">{{ __('translations.labels.stock') }}</label>
+                        <input type="text" id="stock" class="input" name="stock" value="{{ old('stock') }}">
                     </div>
                 </div>
                 <div class="three fields">
@@ -54,8 +54,22 @@
                         @foreach ($products as $product)
                             <tr>
                                 <td>{{ $product->name }}</td>
-                                <td>{{ $product->price }}</td>
-                                <td>{{ $product->stock }}</td>
+                                <td>
+                                <content-update 
+                                    :current-value="'{{ $product->price }}'"
+                                    :update-id="'{{ $product->id }}'"
+                                    :update-key="'price'"
+                                    :update-url="'{{ route('product.update') }}'">
+                                </content-update>
+                                </td>
+                                <td>
+                                    <content-update 
+                                        :current-value="'{{ $product->stock }}'"
+                                        :update-id="'{{ $product->id }}'"
+                                        :update-key="'stock'"
+                                        :update-url="'{{ route('product.update') }}'">
+                                    </content-update>
+                                </td>
                                 <td>{{ $product->orders }}</td>
                                 <td class="right aligned">
                                     <div class="ui items">
@@ -66,15 +80,6 @@
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <button class="mini ui red button">{{ __('translations.buttons.delete') }}</button>
                                                 </form>
-                                                <stock-adjust
-                                                    class="ui right floated"
-                                                    :csrf="'{{ csrf_token() }}'"
-                                                    :quantity="{{ $product->stock }}"
-                                                    :action="'{{ route('product.adjustStock') }}'"
-                                                    :product-id="{{ $product->id }}"
-                                                    :text="'{{ __('translations.buttons.adjust_stock') }}'">
-                                                </stock-adjust>
-
                                             </div>
                                         </div>
                                     </div>

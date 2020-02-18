@@ -68,6 +68,32 @@ class ProductController extends Controller
     }
 
     /**
+     * Update product details
+     *
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $id = $request->input('id');
+
+        $key = $request->input('key');
+
+        $value = $request->input('value');
+
+        $product = product::findOrFail($id);
+
+        $product->{$key} = $value;
+
+        $product->save();
+
+        return response()->json([
+            'status' => 'success',
+            'product' => $product
+        ],200);
+    }
+
+    /**
      * Deletes a product
      *
      * @param String $id

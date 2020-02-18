@@ -44,7 +44,7 @@
                                 <button class="ui tiny primary button button--secondary show_login_btn">{{ __('translations.texts.sign_in') }}</button>
                             @else
                                 <div class="user__menu">
-                                    <i class="ui icon user circle outline color--green"></i><a href="{{ route('user.index') }}" class="mr-1">{{ trans('translations.texts.my_dashboard') }}</a><a href="{{ route('user.login.logout') }}">{{ trans('translations.texts.logout') }}</a>
+                                    <i class="ui icon user circle outline color--green"></i><a href="{{ route('user.orders.index') }}" class="mr-1">{{ trans('translations.texts.my_dashboard') }}</a><a href="{{ route('user.login.logout') }}">{{ trans('translations.texts.logout') }}</a>
                                 </div>
                             @endif
                         @endif

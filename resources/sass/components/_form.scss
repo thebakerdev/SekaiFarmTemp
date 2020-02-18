@@ -22,6 +22,8 @@
 
     .field__item {
         flex: 1;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 }
 

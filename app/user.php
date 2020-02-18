@@ -49,4 +49,26 @@ class user extends Authenticatable {
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    /**
+     * Get user's addresses
+     */
+    public function addresses()
+    {
+        return $this->hasMany('App\address')->orderBy('is_default','desc');
+    }
+
+    /**
+     * Get user's default address
+     *
+     * @return App\address
+     */
+    public function getDefaultAddressAttribute() 
+    {
+        $addresses = $this->addresses;
+
+        $default = $addresses->where('is_default','1');
+
+        return $default->first();
+    }
 }

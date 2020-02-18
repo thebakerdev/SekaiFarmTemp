@@ -25,6 +25,8 @@ Vue.prototype.trans = (string, args) => {
 /* Global vue components */
 Vue.component('stock-adjust', require('./components/admin/StockAdjust.vue').default);
 
+Vue.component('content-update', require('./components/admin/ContentUpdate.vue').default);
+
 Vue.component('user-auth', require('./components/storefront/UserAuth.vue').default); 
 
 Vue.component('stripe-checkout', require('./components/storefront/StripeCheckout.vue').default);

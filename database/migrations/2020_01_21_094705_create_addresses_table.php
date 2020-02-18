@@ -16,6 +16,7 @@ class CreateAddressesTable extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
+            $table->string('name');
             $table->string('country');
             $table->string('state');
             $table->string('city');
@@ -23,7 +24,7 @@ class CreateAddressesTable extends Migration
             $table->string('address2')->nullable();
             $table->string('postal')->nullable();
             $table->string('phone')->nullable();
-            $table->enum('is_default',[0,1])->default(1);
+            $table->enum('is_default',[0,1])->default(0);
             $table->timestamps();
         });
     }
