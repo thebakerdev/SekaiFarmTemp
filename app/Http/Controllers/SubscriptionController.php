@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\product;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -23,6 +24,43 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        return view('user.subscription');
+        $user = auth()->user();
+
+        $product = product::first();
+
+        return view('user.subscription')->with([
+            'user' => $user,
+            'product' => $product
+        ]);
+    }
+
+    /**
+     * Cancels user subscription
+     *
+     * @param Illuminate\Http\Request
+     * @return Illuminate\Http\RedirectResponse
+     */
+    public function cancel(Request $request) 
+    {
+        $user = auth()->user();
+
+        $user->subscription('default')->cancelNow();
+
+        return redirect()->back();
+    }
+
+    /**
+     * Resumes user subscription
+     *
+     * @param Illuminate\Http\Request
+     * @return Illuminate\Http\RedirectResponse
+     */
+    public function resume(Request $request)
+    {
+        $user = auth()->user();
+
+        $user->subscription('default')->resume();
+
+        return redirect()->back();
     }
 }

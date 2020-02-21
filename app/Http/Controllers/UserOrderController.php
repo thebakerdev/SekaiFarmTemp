@@ -23,6 +23,12 @@ class UserOrderController extends Controller
      */
     public function index()
     {
-        return view('user.orders');
+        $user = auth()->user();
+
+      //  dd($user->delivered()->count());
+
+        return view('user.orders')->with([
+            'user' => $user
+        ]);
     }
 }

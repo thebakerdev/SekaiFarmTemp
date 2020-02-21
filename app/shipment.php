@@ -8,19 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class shipment extends Model
 {
     protected $fillable = [
+        'user_id',
+        'stripe_plan',
         'order_number', 
-        'name', 
-        'country', 
-        'city', 
-        'postal', 
-        'address1', 
-        'address2', 
-        'phone', 
         'sent', 
-        'tracking_number', 
-        'date', 
-        'state',
-        'qty'
+        'qty',
+        'tracking_number',
+        'invoice_url', 
+        'date_shipped',
+        'date_delivered'
     ];
 
     /**
@@ -49,6 +45,7 @@ class shipment extends Model
     public function scopePending($query)
     {
         return $query
+                ->with('user')
                 ->latest()
                 ->where('sent', 0);
     }
@@ -62,6 +59,7 @@ class shipment extends Model
     public function scopeShipped($query)
     {
         return $query
+                ->with('user')
                 ->latest()
                 ->where('sent', 1);
     }
@@ -81,11 +79,32 @@ class shipment extends Model
 
         $shipment->tracking_number = $tracking_number;
 
-        $shipment->date = Carbon::now();
+        $shipment->date_shipped = Carbon::now();
 
         $shipment->save();
 
         return $shipment;
     }
+
+    /**
+     * Get shipment status
+     */
+    public function getStatusAttribute()
+    {
+        if ($this->attributes['date_shipped'] !== null && $this->attributes['date_delivered'] === null) {
+            return trans('translations.texts.in_transit');
+        }
+
+        if ($this->attributes['date_shipped'] !== null && $this->attributes['date_delivered'] !== null) {
+            return trans('translations.buttons.delivered');
+        }
+    }
     
+    /**
+     * Get shipment user
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\user');
+    }
 }

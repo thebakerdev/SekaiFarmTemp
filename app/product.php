@@ -25,8 +25,7 @@ class product extends Model
 
         $product->save();
     }
-
-
+    
     /**
      * Creates new product
      *

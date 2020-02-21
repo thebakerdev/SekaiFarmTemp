@@ -15,16 +15,6 @@ const FormValidation = {
         }
     },
     methods: {
-        /* Check if the field is updated */
-        checkIfUpdated(previous,current) {
-
-            if (previous.trim() === current.trim()) {
-
-                return false;
-            }
-
-            return true;
-        },
         /* Sends and validate the form using form-backend-validation plugin */
         validate(form_data, form) {
 
@@ -34,8 +24,6 @@ const FormValidation = {
             if (typeof form.dataset.method !== 'undefined') {
                 method = form.dataset.method;
             }
-
-            console.log(method);
 
             return form_data[method](form.action);
         }

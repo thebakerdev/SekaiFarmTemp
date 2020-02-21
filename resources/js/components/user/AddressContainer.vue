@@ -3,7 +3,8 @@
         <transition name="fade" mode="out-in">
         <address-form 
             :countries="countries"
-            :user="user" 
+            :user="user"
+            :address="address" 
             class="pt-2" 
             v-if="display === 'add' || display === 'edit'"
             @form-event="onComponentEvent">
@@ -41,11 +42,13 @@
         },
         data() {
             return {
+                address: {},
                 address_list: [],
                 display: 'list' //list, add, edit
             }
         },
         methods: {
+            // Listen to child component events
             onComponentEvent(data) {
                 
                 if (data.type === 'cancel') {
@@ -54,22 +57,21 @@
 
                 if (data.type === 'edit') {
                     this.display = 'edit';
+                    this.address = data.payload.address;
                 }
 
                 if (data.type === 'add') {
                     this.display = 'add';
+                    this.address = {};
                 }
 
-                if (data.type === 'saved') {
+                if (data.type === 'update-list') {
                     this.display = 'list';
-                    this.address_list.push(data.payload.address);
-                }
-
-                if (data.type === 'set-default') {
                     this.address_list = data.payload.addresses;
                 }
             }
         },
+        // Set initial data
         created() {
             this.address_list = this.addresses;
         }

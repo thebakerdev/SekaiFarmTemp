@@ -29,14 +29,8 @@ Route::middleware(['localizebybrowser'])->group(function() {
     // Shipment Routes
     Route::put('/shipment/sent', 'ShipmentController@sent')->name('shipment.sent');
     Route::delete('/shipment/delete', 'ShipmentController@destroy')->name('shipment.destroy');
-
-    // Route::post('/create', 'AdminController@create');
-    //Route::get('/create', 'AdminController@goHome');
-    //Route::get('/stock', 'AdminController@stock');
-    //Route::get('/sent/{id}', 'AdminController@sent');
-
-    //Route::get('/shipment/delete', 'AdminController@delete');
-   // Route::get('/product/delete/{id}', 'AdminController@productDelete');
+    Route::put('/shipment/delivered', 'ShipmentController@setDelivered')->name('shipment.setDelivered');
+    
 
     Route::get('/settings', 'SettingsController@index');
     Route::post('/settings/update/basic-info', 'SettingsController@updateBasicInfo');
@@ -54,10 +48,7 @@ Route::middleware(['notregistered','localizebybrowser'])->group(function() {
 
 
     Route::get('/', 'IndexController@index')->name('index');
-    Route::post('/payment', 'ShippingFormController@validateShippingForm');
-    Route::post('/checkpayment', 'PaymentController@check');
-    Route::get('/payment/confirmed', 'PaymentController@confirmed');
-
+    Route::get('/success', 'IndexController@success')->name('success');
     Route::get('/js/lang.js','LocaleController@localizeForJs')->name('locale.localizeForJs');
 });
 
@@ -73,13 +64,17 @@ Route::get('/orders', 'UserOrderController@index')->name('user.orders.index');
 
 Route::get('/address', 'AddressController@index')->name('user.address.index');
 Route::post('/address/store', 'AddressController@store')->name('user.address.store');
-Route::put('/address/set-default', 'AddressController@setDefault')->name('user.addres.setDefault');
+Route::put('/address/update', 'AddressController@update')->name('user.address.update');
+Route::put('/address/set-default', 'AddressController@setDefault')->name('user.address.setDefault');
+Route::delete('/address/delete', 'AddressController@destroy')->name('user.address.destroy');
 
 Route::get('/account', 'UserController@index')->name('user.account.index');
 Route::put('/account/update', 'UserController@update')->name('user.account.update');
 Route::put('/account/change-password', 'UserController@changePassword')->name('user.account.changePassword');
 
 Route::get('/subscription', 'SubscriptionController@index')->name('user.subscription.index');
+Route::post('/subscription/cancel', 'SubscriptionController@cancel')->name('user.subscription.cancel');
+Route::post('/subscription/resume', 'SubscriptionController@resume')->name('user.subscription.resume');
 
 Route::post('/user/login', 'Auth\LoginController@login')->name('user.login.login');
 Route::get('/user/logout', 'Auth\LoginController@logout')->name('user.login.logout');
@@ -89,27 +84,5 @@ Route::post('/user/password/link','Auth\ForgotPasswordController@sendResetLinkEm
 Route::get('/user/password/reset/{token}','Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('/user/password/reset','Auth\ResetPasswordController@reset')->name('password.update');
 
+Route::post('stripe/webhook', 'StripeWebhookController@handleWebhook')->name('stripe.webhook');
 
-Route::get('/ls',function(){
-    return 'wala';
-})->name('login');
-
-
-Route::get('/success', function() {
-    return view('storefront.confirmed');
-});
-
-Route::get('mail', function () {
-
-    $user = \App\user::first();
-    return (new \App\Notifications\ResetPasswordNotification('token'))
-                ->toMail($user);
-});
-
-/* Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home'); */

@@ -36,15 +36,9 @@ Vue.component('user-registration', require('./components/storefront/UserRegistra
 /* Initialize vue */
 const app = new Vue({
     el: '#app',
-    computed: {
-        total: function() {
-            return this.product.qty * this.product.price;
-        }
-    },
     data: {
         product: {
             qty: 1,
-            price: 0,
         }
     },
     methods: {
@@ -63,9 +57,5 @@ const app = new Vue({
     },
     mounted() {
         PageScripts.init();
-
-        if (typeof this.$refs.price !== 'undefined') {
-            this.product.price = this.$refs.price.value;
-        }
     }
 });

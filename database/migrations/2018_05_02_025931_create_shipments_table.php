@@ -15,19 +15,15 @@ class CreateShipmentsTable extends Migration
     {
         Schema::create('shipments', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->string('stripe_plan');
             $table->string('order_number');
-            $table->string('name');
-            $table->string('country');
-            $table->string('state');
-            $table->string('city');
-            $table->string('address1');
-            $table->string('address2')->nullable();
-            $table->string('postal')->nullable();
-            $table->string('phone')->nullable();
-            $table->integer('sent');
+            $table->integer('sent'); 
             $table->integer('qty');
             $table->string('tracking_number')->nullable();
-            $table->date('date')->nullable();
+            $table->string('invoice_url')->nullable();
+            $table->date('date_shipped')->nullable();
+            $table->date('date_delivered')->nullable();
             $table->timestamps();
         });
     }

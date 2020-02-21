@@ -55,7 +55,9 @@ class user extends Authenticatable {
      */
     public function addresses()
     {
-        return $this->hasMany('App\address')->orderBy('is_default','desc');
+        return $this->hasMany('App\address')
+                ->orderBy('is_default','desc')
+                ->orderBy('created_at','desc');
     }
 
     /**
@@ -70,5 +72,27 @@ class user extends Authenticatable {
         $default = $addresses->where('is_default','1');
 
         return $default->first();
+    }
+
+    /**
+     * Get users undelivered order
+     *
+     */
+    public function undelivered()
+    {
+        return $this->hasMany('App\shipment')
+                ->where('sent','0')
+                ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get users delivered orders
+     *
+     */
+    public function delivered()
+    {
+        return $this->hasMany('App\shipment')
+                ->where('sent','1')
+                ->orderBy('created_at', 'desc');
     }
 }

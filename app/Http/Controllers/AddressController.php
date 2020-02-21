@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\address;
 use Illuminate\Http\Request;
+use App\Http\Requests\AddressRequest;
 
 class AddressController extends Controller
 {
@@ -40,23 +41,13 @@ class AddressController extends Controller
     /**
      * Creates a new address for user
      *
-     * @param Illuminate\Http\Request
+     * @param App\Http\Requests\AddressRequest
      * @return Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AddressRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'country' => ['required', 'string', 'max:255'],
-            'city' => ['required', 'string', 'max:255'],
-            'state' => ['required', 'string', 'max:255'],
-            'address1' => ['required'],
-            'postal' => ['required', 'string', 'max:255'],
-            'phone' => ['required'],
-        ]);
-
         $address = address::create([
-            'user_id' => $request->input('id'),
+            'user_id' => $request->input('user_id'),
             'name' => $request->input('name'),
             'country' => $request->input('country'),
             'city' => $request->input('city'),
@@ -67,11 +58,73 @@ class AddressController extends Controller
             'phone' => $request->input('phone')
         ]);
 
+        $user = auth()->user();
+
         return response()->json([
             'status' => 'success',
-            'address' => $address
+            'action' => 'store',
+            'addresses' => $user->addresses->toArray()
         ]);
     }
+
+    /**
+     * Updates user address
+     *
+     * @param App\Http\Requests\AddressRequest
+     * @return Illuminate\Http\Response
+     */
+    public function update(AddressRequest $request)
+    {
+        $address = address::findOrFail($request->input('id'));
+
+        $address->name = $request->input('name');
+        $address->country = $request->input('country');
+        $address->city = $request->input('city');
+        $address->state = $request->input('state');
+        $address->address1 = $request->input('address1');
+        $address->address2 = $request->input('address2');
+        $address->postal = $request->input('postal');
+        $address->phone = $request->input('phone');
+
+        $address->save();
+
+        $user = auth()->user();
+
+        return response()->json([
+            'status' => 'success',
+            'action' => 'update',
+            'addresses' => $user->addresses->toArray()
+        ]);
+    }
+
+    /**
+     * Deletes specified address
+     *
+     * @param Illuminate\Http\Request
+     * @return Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+        $user = auth()->user();
+
+        // get the address based on id and owner
+        $address = address::where('user_id',$user->id)
+                    ->where('id',$request->input('id'))
+                    ->first();
+
+        if ($address === null) {
+
+            return abort(403, 'Unauthorized action.');
+        }
+
+        $address->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'addresses' => $user->addresses->toArray()
+        ]);
+    }
+
 
     /**
      * Set address as default

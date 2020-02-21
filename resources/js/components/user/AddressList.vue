@@ -54,7 +54,7 @@
                     if (response.data.status === 'success') {
 
                         this.$emit('form-event',{
-                            type: 'set-default',
+                            type: 'update-list',
                             payload: {
                                 addresses: response.data.addresses
                             }
@@ -64,7 +64,7 @@
                             this.$notify({
                                 group: 'user-notification',
                                 title: vm.trans('translations.headings.notification'),
-                                text: vm.trans('translations.texts.account_updated'),
+                                text: vm.trans('translations.texts.default_address_set'),
                                 type: 'success'
                             });
                         },200);

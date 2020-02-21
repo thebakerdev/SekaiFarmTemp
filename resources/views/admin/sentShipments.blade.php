@@ -32,21 +32,26 @@
                                 <td class="break-word">{{ $shipment->order_number }}</td>
                                 <td class="break-word">{{ $shipment->qty }}</td>
                                 <td class="break-word">{{ $shipment->tracking_number }}</td>
-                                <td class="break-word">{{ $shipment->name }}</td>
-                                <td class="break-word">{{ $shipment->country }}</td>
-                                <td class="break-word">{{ $shipment->state }}</td>
-                                <td class="break-word">{{ $shipment->city }}</td>
-                                <td class="break-word">{{ $shipment->postal }}</td>
-                                <td class="break-word">{{ $shipment->address1 }}</td>
-                                <td class="break-word">{{ $shipment->address2 }}</td>
-                                <td class="break-word">{{ $shipment->phone }}</td>
-                                <td class="group">
-                                    <form method="POST" action="{{ route('shipment.destroy') }}" class="ui right floated" onSubmit="return confirm('{{ __('translations.texts.delete_confirm') }} {{ $shipment->name }}');">
-                                        @csrf
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="shipment_id" value="{{ $shipment->id }}" />
-                                        <button class="mini ui red button">{{ __('translations.buttons.delete') }}</button>
-                                    </form>
+                                <td class="break-word">{{ $shipment->user->default_address->name }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->country }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->state }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->city }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->postal }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->address1 }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->address2 }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->phone }}</td>
+                                <td>
+                                    <div class="group content flex align-right">
+                                        @if ($shipment->date_delivered === null)
+                                            <button class="mini ui teal button delivered_button" type="button" data-id="{{ $shipment->id }}">{{ __('translations.buttons.delivered') }}</button>
+                                        @endif
+                                        <form method="POST" action="{{ route('shipment.destroy') }}" class="ui right floated" onSubmit="return confirm('{{ __('translations.texts.delete_confirm') }} {{ $shipment->name }}');">
+                                            @csrf
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="shipment_id" value="{{ $shipment->id }}" />
+                                            <button class="mini ui red button">{{ __('translations.buttons.delete') }}</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -60,4 +65,22 @@
         </div>
     </div>
     @include('layouts.modals.ordersInfoModal')
+@endsection
+@section('page-script-after')
+    <script>
+        $(document).ready(function(){
+
+            $('.delivered_button').click(function() {
+
+                var id = $(this).attr('data-id');
+
+                axios.put('/shipment/delivered',{id: id}).then(function(response){
+                    
+                    if (response.data.status === 'success') {
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

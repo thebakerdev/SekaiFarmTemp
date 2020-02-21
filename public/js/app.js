@@ -2448,13 +2448,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -2481,6 +2474,9 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       required: true
     },
+    qty: {
+      required: true
+    },
     stripeKey: {
       type: String,
       required: true
@@ -2492,7 +2488,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     total: function total() {
-      return this.product.price * this.product.qty;
+      console.log(this.product);
+      return this.product.price * this.qty;
     }
   },
   data: function data() {
@@ -2519,33 +2516,39 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onRegister: function onRegister(e) {
-      e.preventDefault();
-      var vm = this;
-      this.validate(this.registration_data, this.$refs.registration_form).then(function (response) {
-        if (response.status === 'success') {
-          vm.$refs.stripe_input.confirmCardSetup().then(function (response) {
-            if (typeof response.setupIntent !== 'undefined') {
-              var form = document.getElementById('registration_form');
-              vm.payment_method = response.setupIntent.payment_method;
-              vm.form_action = vm.actionUrl;
-              setTimeout(function () {
-                form.submit();
-              }, 1000);
-            }
+    onRegister: function onRegister() {
+      var _this = this;
 
-            if (typeof response.error !== 'undefined') {
-              vm.$refs.stripe_input.triggerCardError(response.error.message);
-            }
-          })["catch"](function (error) {
-            console.log(error.message);
-          });
-        }
-      })["catch"](function (error) {//check card error
-      });
+      var vm = this;
+
+      if (this.button.state === 'active') {
+        this.button.state = 'loading';
+        this.validate(this.registration_data, this.$refs.registration_form).then(function (response) {
+          if (response.status === 'success') {
+            vm.$refs.stripe_input.confirmCardSetup().then(function (response) {
+              if (typeof response.setupIntent !== 'undefined') {
+                var form = document.getElementById('registration_form');
+                vm.payment_method = response.setupIntent.payment_method;
+                vm.form_action = vm.actionUrl;
+                setTimeout(function () {
+                  form.submit();
+                }, 500);
+              }
+
+              if (typeof response.error !== 'undefined') {
+                vm.$refs.stripe_input.triggerCardError(response.error.message);
+                _this.button.state = 'active';
+              }
+            })["catch"](function (error) {
+              _this.button.state = 'active';
+            });
+          }
+        })["catch"](function (error) {
+          _this.button.state = 'active';
+        });
+      }
     }
   },
-  mixins: [_mixins_formValidation__WEBPACK_IMPORTED_MODULE_2__["default"]],
   mounted: function mounted() {
     var vm = this;
     this.form_action = this.validationUrl;
@@ -2558,7 +2561,8 @@ __webpack_require__.r(__webpack_exports__);
     $('.show_login_btn').click(function () {
       $('#login_modal').modal('show');
     });
-  }
+  },
+  mixins: [_mixins_formValidation__WEBPACK_IMPORTED_MODULE_2__["default"]]
 });
 
 /***/ }),
@@ -27392,7 +27396,8 @@ var render = function() {
         },
         on: {
           submit: function($event) {
-            return _vm.onRegister($event)
+            $event.preventDefault()
+            return _vm.onRegister()
           },
           keydown: function($event) {
             return _vm.registration_data.errors.clear($event.target.name)
@@ -27407,7 +27412,22 @@ var render = function() {
         _vm._v(" "),
         _c("input", {
           attrs: { type: "hidden", name: "qty" },
-          domProps: { value: _vm.product.qty }
+          domProps: { value: _vm.qty }
+        }),
+        _vm._v(" "),
+        _c("input", {
+          attrs: { type: "hidden", name: "product_id" },
+          domProps: { value: _vm.product.id }
+        }),
+        _vm._v(" "),
+        _c("input", {
+          attrs: { type: "hidden", name: "product_name" },
+          domProps: { value: _vm.product.name }
+        }),
+        _vm._v(" "),
+        _c("input", {
+          attrs: { type: "hidden", name: "product_price" },
+          domProps: { value: _vm.product.price }
         }),
         _vm._v(" "),
         _c("input", {
@@ -27933,48 +27953,10 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "two fields" }, [
-                    _c("div", { staticClass: "five wide field" }, [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "ui fluid selection dropdown",
-                          attrs: { id: "calling_code_dropdown" }
-                        },
-                        [
-                          _c("input", {
-                            attrs: {
-                              id: "calling_code",
-                              type: "hidden",
-                              name: "calling_code"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", { staticClass: "dropdown icon" }),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "default text" }, [
-                            _vm._v(
-                              _vm._s(_vm.trans("translations.labels.code"))
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "menu" }, [
-                            _c(
-                              "div",
-                              {
-                                staticClass: "item",
-                                attrs: { "data-value": "+1" }
-                              },
-                              [_c("i", { staticClass: "us flag" })]
-                            )
-                          ])
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
                     _c(
                       "div",
                       {
-                        staticClass: "eleven wide field",
+                        staticClass: "eight wide field",
                         class: _vm.registration_data.errors.has("phone")
                           ? "error"
                           : ""
@@ -28037,6 +28019,7 @@ var render = function() {
                     "button",
                     {
                       staticClass: "ui large button button--primary",
+                      class: _vm.buttonStyle,
                       attrs: { id: "subscribe_btn", type: "submit" }
                     },
                     [
@@ -40310,15 +40293,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('user-registration', __webp
 
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
-  computed: {
-    total: function total() {
-      return this.product.qty * this.product.price;
-    }
-  },
   data: {
     product: {
-      qty: 1,
-      price: 0
+      qty: 1
     }
   },
   methods: {
@@ -40336,10 +40313,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   },
   mounted: function mounted() {
     _page_scripts__WEBPACK_IMPORTED_MODULE_1__["default"].init();
-
-    if (typeof this.$refs.price !== 'undefined') {
-      this.product.price = this.$refs.price.value;
-    }
   }
 });
 
@@ -40798,15 +40771,6 @@ var FormValidation = {
     };
   },
   methods: {
-    /* Check if the field is updated */
-    checkIfUpdated: function checkIfUpdated(previous, current) {
-      if (previous.trim() === current.trim()) {
-        return false;
-      }
-
-      return true;
-    },
-
     /* Sends and validate the form using form-backend-validation plugin */
     validate: function validate(form_data, form) {
       var method = form.method; //check if data attribute is set. This is for put and delete request
@@ -40815,7 +40779,6 @@ var FormValidation = {
         method = form.dataset.method;
       }
 
-      console.log(method);
       return form_data[method](form.action);
     }
   }

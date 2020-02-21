@@ -64,6 +64,7 @@
             }
         },
         methods: {
+            // Listen to child component events
             onComponentEvent(data) {
                 if (data.type === 'cancel') {
                     this.display = 'list';
@@ -75,6 +76,7 @@
                 }
             } 
         },
+        // Set initial data
         created() {
             this.user_info = this.user;
         }

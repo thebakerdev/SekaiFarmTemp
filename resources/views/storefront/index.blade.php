@@ -52,7 +52,8 @@
                                 :validation-url="'{{ route('user.validate') }}'"
                                 :stripe-key="'{{ $stripe_key }}'" 
                                 :client-secret="'{{ $payment_intent->client_secret}}'"
-                                :product="product"
+                                :product="{{ json_encode($product) }}"
+                                :qty="product.qty"
                                 :countries="{{ json_encode($supported_countries) }}">
                             </user-registration>
                         @else
@@ -73,33 +74,6 @@
 @section('page-script-after')
     <script>
         $(document).ready(function(){
-
-           /*  $('.ui.form').form({
-                fields: {
-                    name        : 'empty',
-                    country     : 'not[0|country]',
-                    state       : 'empty',
-                    city        : 'empty',
-                    address1    : 'empty',
-                    postal      : 'empty',
-                    phone       : 'number'
-                }
-            }); */
-
-           /*  $('#countryDropdown').dropdown({
-                onChange: function() {
-
-                    var country = $('#country').val();
-
-                    //set calling code
-                    $('#callingCodeDropdown').dropdown('set selected',get_calling_code(country));
-                    //trigger change event
-                    $('#country').change();
-
-                    remove_error();
-                }
-            }); */
-
             $('#form_display_btn').click(function() {
                 
                 $('.product__form-input').fadeIn();
@@ -111,29 +85,5 @@
 
             
         });
-
-        /* Returns calling code value */
-        function get_calling_code(country) {
-            var callingCodes = {!! json_encode(App\country::getCountryCodes()) !!}
-
-            return callingCodes[country];
-        }
-
-         /* Removes error class as semantic does not detect change on error */
-         function remove_error() {
-
-            var postal = $('#postal'),
-                postalParent = postal.parent('.field'),
-                callingCodeParent = $('#callingCodeDropdown').parent('.field');
-
-            if(postalParent.hasClass('error') && (postal.val()).trim() != '') {
-                postalParent.removeClass('error');
-            }
-
-            if(callingCodeParent.hasClass('error')) {
-                callingCodeParent.removeClass('error');
-            }
-
-        }
     </script>
 @endsection

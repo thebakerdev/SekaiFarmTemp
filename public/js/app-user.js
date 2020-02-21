@@ -1997,6 +1997,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    // Listen to child component events
     onComponentEvent: function onComponentEvent(data) {
       if (data.type === 'cancel') {
         this.display = 'list';
@@ -2008,6 +2009,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  // Set initial data
   created: function created() {
     this.user_info = this.user;
   }
@@ -2052,7 +2054,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2064,7 +2065,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      modified: false,
       form: new form_backend_validation__WEBPACK_IMPORTED_MODULE_0___default.a({
         name: '',
         email: '',
@@ -2075,24 +2075,20 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    // Emit cancel event
     cancel: function cancel() {
       this.$emit('form-event', {
         type: 'cancel',
         payload: {}
       });
     },
-    formIsModified: function formIsModified(is_modified) {
-      if (is_modified === true) {
-        this.modified = true;
-        this.button.state = 'active';
-      }
-    },
+    // handles form submission
     onSubmit: function onSubmit() {
       var _this = this;
 
       var vm = this;
 
-      if (this.modified === true) {
+      if (this.button.state === 'active') {
         this.button.state = 'loading';
         this.validate(this.form, this.$refs.account_update_form).then(function (response) {
           if (response.status === 'success') {
@@ -2110,8 +2106,6 @@ __webpack_require__.r(__webpack_exports__);
                 text: vm.trans('translations.texts.account_updated')
               });
             }, 400);
-            _this.button.state = 'disabled';
-            _this.modified = false;
           }
         })["catch"](function (error) {
           _this.button.state = 'active';
@@ -2119,13 +2113,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
-  mounted: function mounted() {
+  created: function created() {
     this.form.populate({
-      'name': this.user.name,
-      'email': this.user.email,
-      'address': this.user.address
+      name: this.user.name,
+      email: this.user.email,
+      address: this.user.address
     });
-    this.button.state = 'disabled';
   },
   mixins: [_mixins_formValidation__WEBPACK_IMPORTED_MODULE_1__["default"]]
 });
@@ -2143,6 +2136,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _AddressList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddressList */ "./resources/js/components/user/AddressList.vue");
 /* harmony import */ var _AddressForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddressForm */ "./resources/js/components/user/AddressForm.vue");
+//
 //
 //
 //
@@ -2184,12 +2178,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      address: {},
       address_list: [],
       display: 'list' //list, add, edit
 
     };
   },
   methods: {
+    // Listen to child component events
     onComponentEvent: function onComponentEvent(data) {
       if (data.type === 'cancel') {
         this.display = 'list';
@@ -2197,22 +2193,21 @@ __webpack_require__.r(__webpack_exports__);
 
       if (data.type === 'edit') {
         this.display = 'edit';
+        this.address = data.payload.address;
       }
 
       if (data.type === 'add') {
         this.display = 'add';
+        this.address = {};
       }
 
-      if (data.type === 'saved') {
+      if (data.type === 'update-list') {
         this.display = 'list';
-        this.address_list.push(data.payload.address);
-      }
-
-      if (data.type === 'set-default') {
         this.address_list = data.payload.addresses;
       }
     }
   },
+  // Set initial data
   created: function created() {
     this.address_list = this.addresses;
   }
@@ -2298,8 +2293,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -2315,12 +2308,19 @@ __webpack_require__.r(__webpack_exports__);
     user: {
       type: Object,
       required: true
+    },
+    address: {
+      type: Object,
+      required: true
     }
   },
   data: function data() {
     return {
+      action: '',
+      method: '',
       form: new form_backend_validation__WEBPACK_IMPORTED_MODULE_1___default.a({
         id: '',
+        user_id: '',
         name: '',
         country: '',
         state: '',
@@ -2329,55 +2329,132 @@ __webpack_require__.r(__webpack_exports__);
         address1: '',
         address2: '',
         phone: ''
-      })
+      }),
+      show_delete: false
     };
   },
   methods: {
+    // Emit cancel event
     cancel: function cancel() {
       this.$emit('form-event', {
         type: 'cancel',
         payload: {}
       });
     },
-    onSubmit: function onSubmit() {
+    // Deletes selected address
+    deleteAddress: function deleteAddress(id) {
       var _this = this;
 
       var vm = this;
-      this.button.state = 'loading';
-      this.validate(this.form, this.$refs.address_form).then(function (response) {
-        _this.$emit('form-event', {
-          type: 'saved',
-          payload: {
-            address: response.address
-          }
-        });
+      axios["delete"]('/address/delete', {
+        data: {
+          id: id
+        }
+      }).then(function (response) {
+        if (response.data.status === 'success') {
+          _this.$emit('form-event', {
+            type: 'update-list',
+            payload: {
+              addresses: response.data.addresses
+            }
+          });
 
-        if (response.status === 'success') {
           setTimeout(function () {
             _this.$notify({
               group: 'user-notification',
               title: vm.trans('translations.headings.notification'),
-              text: vm.trans('translations.texts.account_updated')
+              text: vm.trans('translations.texts.address_deleted'),
+              type: 'error'
             });
           }, 400);
         }
-      })["finally"](function () {
-        _this.button.state = 'active';
+      })["catch"](function (error) {
+        alert('Unauthorized action.');
       });
+    },
+    // Initialize semantic dropddown button
+    initializeDropdown: function initializeDropdown() {
+      var vm = this;
+      $('.ui.dropdown').dropdown();
+      $('#country').change(function () {
+        vm.form.populate({
+          country: $(this).val()
+        });
+        vm.form.errors.clear('country');
+      });
+    },
+    // Innitialize form action, method, post to handle add or update
+    initializeForm: function initializeForm() {
+      var add_url = '/address/store';
+      var update_url = '/address/update'; // Check if address object is not empty
+
+      if (Object.entries(this.address).length > 0) {
+        this.action = update_url;
+        this.method = 'put';
+        this.form.populate({
+          id: this.address.id,
+          user_id: this.user.id,
+          name: this.address.name,
+          country: this.address.country,
+          state: this.address.state,
+          city: this.address.city,
+          postal: this.address.postal,
+          address1: this.address.address1,
+          address2: this.address.address2,
+          phone: this.address.phone
+        });
+        this.show_delete = true;
+      } else {
+        this.action = add_url;
+        this.method = 'post';
+        this.form.populate({
+          user_id: this.user.id
+        });
+        this.show_delete = false;
+      }
+    },
+    // Handles form submission
+    onSubmit: function onSubmit() {
+      var _this2 = this;
+
+      var vm = this;
+
+      if (this.button.state === 'active') {
+        this.button.state = 'loading';
+        this.validate(this.form, this.$refs.address_form).then(function (response) {
+          if (response.status === 'success') {
+            var message = response.action === 'store' ? vm.trans('translations.texts.new_address_added') : vm.trans('translations.texts.address_updated');
+
+            _this2.$emit('form-event', {
+              type: 'update-list',
+              payload: {
+                addresses: response.addresses
+              }
+            });
+
+            setTimeout(function () {
+              _this2.$notify({
+                group: 'user-notification',
+                title: vm.trans('translations.headings.notification'),
+                text: message
+              });
+            }, 400);
+          }
+        })["finally"](function () {
+          _this2.button.state = 'active';
+        });
+      }
     }
   },
+  created: function created() {
+    this.initializeForm();
+  },
   mounted: function mounted() {
-    var vm = this;
-    $('.ui.dropdown').dropdown();
-    this.form.populate({
-      'id': this.user.id
-    });
-    $('#country').change(function () {
-      vm.form.populate({
-        country: $(this).val()
-      });
-      vm.form.errors.clear('country');
-    });
+    var _this3 = this;
+
+    setTimeout(function () {
+      _this3.initializeDropdown();
+    }, 200);
   },
   mixins: [_mixins_formValidation__WEBPACK_IMPORTED_MODULE_2__["default"]]
 });
@@ -2446,7 +2523,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.data.status === 'success') {
           _this.$emit('form-event', {
-            type: 'set-default',
+            type: 'update-list',
             payload: {
               addresses: response.data.addresses
             }
@@ -2456,7 +2533,7 @@ __webpack_require__.r(__webpack_exports__);
             _this.$notify({
               group: 'user-notification',
               title: vm.trans('translations.headings.notification'),
-              text: vm.trans('translations.texts.account_updated'),
+              text: vm.trans('translations.texts.default_address_set'),
               type: 'success'
             });
           }, 200);
@@ -26370,11 +26447,6 @@ var render = function() {
           },
           keydown: function($event) {
             return _vm.form.errors.clear($event.target.name)
-          },
-          keyup: function($event) {
-            _vm.formIsModified(
-              _vm.checkIfUpdated($event.target.dataset.old, $event.target.value)
-            )
           }
         }
       },
@@ -26399,12 +26471,7 @@ var render = function() {
                   expression: "form.name"
                 }
               ],
-              attrs: {
-                type: "text",
-                id: "name",
-                name: "name",
-                "data-old": _vm.user.name
-              },
+              attrs: { type: "text", id: "name", name: "name" },
               domProps: { value: _vm.form.name },
               on: {
                 input: function($event) {
@@ -26438,12 +26505,7 @@ var render = function() {
                   expression: "form.email"
                 }
               ],
-              attrs: {
-                type: "email",
-                id: "email",
-                name: "email",
-                "data-old": _vm.user.email
-              },
+              attrs: { type: "email", id: "email", name: "email" },
               domProps: { value: _vm.form.email },
               on: {
                 input: function($event) {
@@ -26518,7 +26580,11 @@ var render = function() {
           _vm.display === "add" || _vm.display === "edit"
             ? _c("address-form", {
                 staticClass: "pt-2",
-                attrs: { countries: _vm.countries, user: _vm.user },
+                attrs: {
+                  countries: _vm.countries,
+                  user: _vm.user,
+                  address: _vm.address
+                },
                 on: { "form-event": _vm.onComponentEvent }
               })
             : _vm._e(),
@@ -26564,7 +26630,11 @@ var render = function() {
       {
         ref: "address_form",
         staticClass: "ui form",
-        attrs: { action: "/address/store", method: "post" },
+        attrs: {
+          action: _vm.action,
+          method: "post",
+          "data-method": _vm.method
+        },
         on: {
           submit: function($event) {
             $event.preventDefault()
@@ -26860,36 +26930,9 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "two fields" }, [
-              _c("div", { staticClass: "five wide field" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "ui fluid selection dropdown",
-                    attrs: { id: "calling_code_dropdown" }
-                  },
-                  [
-                    _c("input", {
-                      attrs: {
-                        id: "calling_code",
-                        type: "hidden",
-                        name: "calling_code"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("i", { staticClass: "dropdown icon" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "default text" }, [
-                      _vm._v(_vm._s(_vm.trans("translations.labels.code")))
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(0)
-                  ]
-                )
-              ]),
-              _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "eleven wide field" },
+                { staticClass: "eight wide field" },
                 [
                   _c("imask-input", {
                     attrs: {
@@ -26914,14 +26957,35 @@ var render = function() {
         ),
         _vm._v(" "),
         _c("div", { staticClass: "field text-right " }, [
-          _c("button", { staticClass: "ui button button--primary" }, [
-            _vm._v(_vm._s(_vm.trans("translations.buttons.save_changes")))
-          ]),
+          _c(
+            "button",
+            {
+              staticClass: "ui button button--primary mb-1",
+              class: _vm.buttonStyle
+            },
+            [_vm._v(_vm._s(_vm.trans("translations.buttons.save_changes")))]
+          ),
+          _vm._v(" "),
+          _vm.show_delete === true && _vm.address.is_default !== "1"
+            ? _c(
+                "button",
+                {
+                  staticClass: "ui button button--danger mb-1",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteAddress(_vm.address.id)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.trans("translations.buttons.delete")))]
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "button",
             {
-              staticClass: "ui button",
+              staticClass: "ui button mb1",
               attrs: { type: "button" },
               on: {
                 click: function($event) {
@@ -26936,18 +27000,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "menu" }, [
-      _c("div", { staticClass: "item", attrs: { "data-value": "+1" } }, [
-        _c("i", { staticClass: "us flag" })
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -41165,15 +41218,6 @@ var FormValidation = {
     };
   },
   methods: {
-    /* Check if the field is updated */
-    checkIfUpdated: function checkIfUpdated(previous, current) {
-      if (previous.trim() === current.trim()) {
-        return false;
-      }
-
-      return true;
-    },
-
     /* Sends and validate the form using form-backend-validation plugin */
     validate: function validate(form_data, form) {
       var method = form.method; //check if data attribute is set. This is for put and delete request
@@ -41182,7 +41226,6 @@ var FormValidation = {
         method = form.dataset.method;
       }
 
-      console.log(method);
       return form_data[method](form.action);
     }
   }

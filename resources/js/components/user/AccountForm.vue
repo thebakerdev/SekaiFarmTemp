@@ -7,15 +7,14 @@
             data-method="put" 
             ref="account_update_form" 
             @submit.prevent="onSubmit()" 
-            @keydown="form.errors.clear($event.target.name)"
-            @keyup="formIsModified(checkIfUpdated($event.target.dataset.old,$event.target.value))">
+            @keydown="form.errors.clear($event.target.name)">
             <div class="field" :class="form.errors.has('name') ? 'error':''">
                 <label for="name">{{ trans('translations.labels.name') }}</label>
-                <input type="text" id="name" name="name" v-model="form.name" :data-old="user.name">
+                <input type="text" id="name" name="name" v-model="form.name">
             </div>
             <div class="field" :class="form.errors.has('email') ? 'error':''">
                 <label for="name">{{ trans('translations.labels.email') }}</label>
-                <input type="email" id="email" name="email" v-model="form.email" :data-old="user.email">
+                <input type="email" id="email" name="email" v-model="form.email">
             </div>
             <div class="field text-right">
                 <button class="ui button button--primary mb-1" :class="buttonStyle">{{ trans('translations.buttons.save_changes') }}</button>
@@ -38,7 +37,6 @@
         },
         data() {
             return {
-                modified: false,
                 form: new Form({
                     name: '',
                     email: '',
@@ -47,28 +45,24 @@
             }
         },
         methods: {
+            // Emit cancel event
             cancel() {
                 this.$emit('form-event',{
                     type: 'cancel',
                     payload: {}
                 });
             },
-            formIsModified(is_modified) {
-                if (is_modified === true) {
-                    this.modified = true;
-                    this.button.state = 'active';
-                }
-            },
+            // handles form submission
             onSubmit() {
 
                 const vm = this;
 
-                if (this.modified === true) {
-                    
-                    this.button.state = 'loading';
+                if (this.button.state === 'active') {
 
+                    this.button.state = 'loading';
+                    
                     this.validate(this.form, this.$refs.account_update_form).then(response => {
-                        
+                    
                         if (response.status === 'success') {
 
                             this.$emit('form-event',{
@@ -86,23 +80,21 @@
                                 });
                             },400);
 
-                            this.button.state = 'disabled';
-                            this.modified = false;
                         }
                     }).catch(error => {
                         this.button.state = 'active';
                     });
                 }
+                
+                
             },
         },
-        mounted() {
+        created() {
             this.form.populate({
-                'name': this.user.name,
-                'email': this.user.email,
-                'address': this.user.address
+                name: this.user.name,
+                email: this.user.email,
+                address: this.user.address
             });
-
-            this.button.state = 'disabled'
         },
         mixins: [FormValidation]
     }

@@ -30,14 +30,14 @@
                             <tr>
                                 <td class="break-word">{{ $shipment->order_number }}</td>
                                 <td class="break-word">{{ $shipment->qty }}</td>
-                                <td class="break-word">{{ $shipment->name }}</td>
-                                <td class="break-word">{{ $shipment->country }}</td>
-                                <td class="break-word">{{ $shipment->state }}</td>
-                                <td class="break-word">{{ $shipment->city }}</td>
-                                <td class="break-word">{{ $shipment->postal }}</td>
-                                <td class="break-word">{{ $shipment->address1 }}</td>
-                                <td class="break-word">{{ $shipment->address2 }}</td>
-                                <td class="break-word">{{ $shipment->phone }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->name }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->country }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->state }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->city }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->postal }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->address1 }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->address2 }}</td>
+                                <td class="break-word">{{ $shipment->user->default_address->phone }}</td>
                                 <td>
                                     <div class="group content flex align-right">
                                         <form method="POST" action="{{ route('shipment.sent') }}" id="sentForm-{{ $shipment->id }}" class="ui right floated">

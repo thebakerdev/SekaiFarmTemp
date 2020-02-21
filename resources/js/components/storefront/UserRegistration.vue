@@ -1,8 +1,11 @@
 <template>
     <div class="user-registration">
-        <form id="registration_form" method="post" :action="form_action" ref="registration_form" class="ui form" @submit="onRegister($event)" @keydown="registration_data.errors.clear($event.target.name)">
+        <form id="registration_form" method="post" :action="form_action" ref="registration_form" class="ui form" @submit.prevent="onRegister()" @keydown="registration_data.errors.clear($event.target.name)">
             <input type="hidden" name="_token" :value="csrf">
-            <input type="hidden" name="qty" :value="product.qty">
+            <input type="hidden" name="qty" :value="qty">
+            <input type="hidden" name="product_id" :value="product.id">
+            <input type="hidden" name="product_name" :value="product.name">
+            <input type="hidden" name="product_price" :value="product.price">
             <input type="hidden" name="payment_method" :value="payment_method">
             <transition name="fade" mode="out-in">
                 <div v-show="show_form">
@@ -78,17 +81,7 @@
                         <div class="field">
                             <label for="phone">{{ trans('translations.labels.phone') }} <small>({{trans('translations.labels.phone_tracking')}})</small></label>
                             <div class="two fields">
-                                <div class="five wide field">
-                                    <div id="calling_code_dropdown" class="ui fluid selection dropdown">
-                                        <input id="calling_code" type="hidden" name="calling_code">
-                                        <i class="dropdown icon"></i>
-                                        <div class="default text">{{ trans('translations.labels.code') }}</div>
-                                        <div class="menu">
-                                            <div class="item" data-value="+1"><i class="us flag"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="eleven wide field" :class="registration_data.errors.has('phone') ? 'error':''">
+                                <div class="eight wide field" :class="registration_data.errors.has('phone') ? 'error':''">
                                     <imask-input v-model="registration_data.phone"  name="phone" :mask="'+num'" :blocks="{ num: { mask: Number}}" :lazy="true"/>
                                 </div>
                             </div>
@@ -101,7 +94,7 @@
             </transition>
             <div class="user-registration__actions field mt-2">
                 <template v-if="show_form">
-                    <button id="subscribe_btn" type="submit" class="ui large button button--primary">{{ trans('translations.buttons.subscribe') }}</button>
+                    <button id="subscribe_btn" type="submit" class="ui large button button--primary" :class="buttonStyle">{{ trans('translations.buttons.subscribe') }}</button>
                 </template>
             </div>
         </form>
@@ -141,6 +134,9 @@
                 type: Object,
                 required: true
             },
+            qty: {
+                required: true
+            },
             stripeKey: {
                 type: String,
                 required: true
@@ -152,7 +148,9 @@
         },
         computed: {
             total() {
-                return this.product.price * this.product.qty;
+
+                console.log(this.product);
+                return this.product.price * this.qty;
             }
         },
         data() {
@@ -177,47 +175,48 @@
             }
         },
         methods: {
-            onRegister(e) {
-
-                e.preventDefault();
+            onRegister() {
 
                 const vm = this;
 
-                this.validate(this.registration_data, this.$refs.registration_form).then(response => {
+                if (this.button.state === 'active') {
+                    
+                    this.button.state = 'loading';
 
-                    if (response.status === 'success') {
-                        
-                        vm.$refs.stripe_input.confirmCardSetup().then(response => {
+                    this.validate(this.registration_data, this.$refs.registration_form).then(response => {
 
-                            if (typeof response.setupIntent !== 'undefined') {
+                        if (response.status === 'success') {
+                            
+                            vm.$refs.stripe_input.confirmCardSetup().then(response => {
 
-                                const form = document.getElementById('registration_form');
+                                if (typeof response.setupIntent !== 'undefined') {
 
-                                vm.payment_method = response.setupIntent.payment_method;
+                                    const form = document.getElementById('registration_form');
 
-                                vm.form_action = vm.actionUrl;
+                                    vm.payment_method = response.setupIntent.payment_method;
 
-                                setTimeout(()=>{
-                                    form.submit();
-                                },1000);
-                            }
+                                    vm.form_action = vm.actionUrl;
 
-                            if (typeof response.error !== 'undefined') {
-                               
-                               vm.$refs.stripe_input.triggerCardError(response.error.message);
+                                    setTimeout(()=>{
+                                        form.submit();
+                                    },500);
+                                }
 
-                            }
-                        }).catch(error => {
-                            console.log(error.message);
-                        });
-                    }
-     
-                }).catch(error => {
-                    //check card error
-                });
+                                if (typeof response.error !== 'undefined') {
+                                
+                                    vm.$refs.stripe_input.triggerCardError(response.error.message);
+                                    this.button.state = 'active';
+                                }
+                            }).catch(error => {
+                                this.button.state = 'active';
+                            });
+                        }
+                    }).catch(error => {
+                        this.button.state = 'active';
+                    });
+                }
             }
         },
-        mixins: [FormValidation],
         mounted() {
 
             const vm = this;
@@ -236,6 +235,7 @@
             $('.show_login_btn').click(function() {
                 $('#login_modal').modal('show');
             });
-        }
+        },
+        mixins: [FormValidation],
     }
 </script>

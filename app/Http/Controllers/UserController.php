@@ -6,6 +6,7 @@ use DB;
 use App\user;
 use App\address;
 use Illuminate\Http\Request;
+use App\Events\UserRegistered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegistrationRequest;
@@ -42,7 +43,7 @@ class UserController extends Controller
      * Creates a user account
      *
      * @param Illuminate\Http\Request
-     * @return 
+     * @return Illuminate\Http\RedirectResponse
      */
     public function store(RegistrationRequest $request)
     {
@@ -71,11 +72,19 @@ class UserController extends Controller
 
             return $user;
         });
+
+        event(new UserRegistered($user, $request->input('qty'), $request->input('payment_method'), $request->input('product_id'))); 
         
         //logs the user after creation
         Auth::login($user);
 
-        return redirect('/success');
+        session(['subscription_details' => [
+            'product_name' => $request->input('product_name'),
+            'product_price' => $request->input('product_price'),
+            'qty' => $request->input('qty')
+        ]]);
+
+        return redirect(route('success'));
     }
 
     /**

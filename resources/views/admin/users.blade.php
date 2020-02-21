@@ -17,11 +17,23 @@
                     <th>Stripe ID</th>
                     <th>Plan</th>
                     <th>Quantity</th>
+                    <th>Status</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="break-word">test</td>
-                    </tr>
+                    @if ($users->count())
+                        @foreach($users as $user)
+                        <tr>
+                            <td class="break-word">{{ $user->email }}</td>
+                            <td class="break-word">{{ $user->name }}</td>
+                            <td class="break-word">{{ $user->stripe_id }}</td>
+                            <td class="break-word">{{ $user->subscription()->stripe_plan }}</td>
+                            <td class="break-word">{{ $user->subscription()->quantity }}</td>
+                            <td class="break-word">{{ $user->subscription()->stripe_status }}</td>
+                        </tr>
+                        @endforeach
+                    @else
+
+                    @endif
                 </tbody>
             </table>
         </div>

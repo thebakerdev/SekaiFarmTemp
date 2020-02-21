@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\shipment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ShipmentController extends Controller
@@ -42,7 +43,7 @@ class ShipmentController extends Controller
      * Set shipment status as sent
      *
      * @param Illuminate\Http\Request
-     * @return void
+     * @return Illuminate\Http\Response;
      */
     public function sent(Request $request)
     {
@@ -58,5 +59,30 @@ class ShipmentController extends Controller
         ]);
 
         return back();
+    }
+
+    /**
+     * Set shipment as delivered
+     *
+     * @param Illuminate\Http\Request
+     * @return Illuminate\Http\Response;
+     */
+    public function setDelivered(Request $request)
+    {
+
+        $shipment = shipment::findOrFail($request->input('id'));
+
+        $shipment->date_delivered = Carbon::now();
+
+        $shipment->save();
+
+        session()->flash("notification", [
+            'message' => trans('translations.texts.shipment_was_delivered'),
+            'type' => 'success',
+        ]);
+
+        return response()->json([
+            'status' => 'success'
+        ],200);
     }
 }

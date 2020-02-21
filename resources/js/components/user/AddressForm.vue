@@ -1,6 +1,13 @@
 <template>
     <div class="user-address__form">
-        <form action="/address/store" method="post" class="ui form" @submit.prevent="onSubmit()" ref="address_form" @keydown="form.errors.clear($event.target.name)">
+        <form 
+            :action="action" 
+            method="post"
+            :data-method="method"  
+            class="ui form" 
+            @submit.prevent="onSubmit()" 
+            ref="address_form" 
+            @keydown="form.errors.clear($event.target.name)">
             <div class="field" :class="form.errors.has('name') ? 'error':''">
                 <label for="name">{{ trans('translations.labels.name') }}</label>
                 <input type="text" id="name" name="name" v-model="form.name">
@@ -43,24 +50,15 @@
             <div class="field" :class="form.errors.has('phone') ? 'error':''">
                 <label for="phone">{{ trans('translations.labels.phone') }}</label>
                 <div class="two fields">
-                    <div class="five wide field">
-                        <div id="calling_code_dropdown" class="ui fluid selection dropdown">
-                            <input id="calling_code" type="hidden" name="calling_code">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">{{ trans('translations.labels.code') }}</div>
-                            <div class="menu">
-                                <div class="item" data-value="+1"><i class="us flag"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="eleven wide field">
+                    <div class="eight wide field">
                         <imask-input  name="phone" :mask="'+num'" :blocks="{ num: { mask: Number}}" :lazy="true" v-model="form.phone"/>
                     </div>
                 </div>
             </div>
             <div class="field text-right ">
-                <button class="ui button button--primary">{{ trans('translations.buttons.save_changes') }}</button>
-                <button type="button" class="ui button" @click="cancel()">{{ trans('translations.buttons.cancel') }}</button>
+                <button class="ui button button--primary mb-1" :class="buttonStyle">{{ trans('translations.buttons.save_changes') }}</button>
+                <button type="button" class="ui button button--danger mb-1" v-if="show_delete === true && address.is_default !=='1'" @click="deleteAddress(address.id)">{{ trans('translations.buttons.delete') }}</button>
+                <button type="button" class="ui button mb1" @click="cancel()">{{ trans('translations.buttons.cancel') }}</button>
             </div>
         </form>
     </div>
@@ -84,12 +82,19 @@
             user: {
                 type: Object,
                 required: true
+            },
+            address: {
+                type: Object,
+                required: true
             }
         },
         data() {
             return {
+                action: '',
+                method: '',
                 form:  new Form({
                     id: '',
+                    user_id: '',
                     name: '',
                     country: '',
                     state: '',
@@ -98,64 +103,155 @@
                     address1: '',
                     address2: '',
                     phone: ''
-                })
+                }),
+                show_delete: false
             }
         },
         methods: {
+            // Emit cancel event
             cancel() {
                 this.$emit('form-event',{
                     type: 'cancel',
                     payload: {}
                 });
             },
-            onSubmit() {
+            // Deletes selected address
+            deleteAddress(id) {
 
                 const vm = this;
 
-                this.button.state = 'loading';
+                axios.delete('/address/delete',{
+                    data: {
+                        id:id
+                    }
+                }).then(response => {
 
-                this.validate(this.form, this.$refs.address_form).then(response => {
+                    if (response.data.status === 'success') {
 
-                    this.$emit('form-event',{
-                        type: 'saved',
-                        payload: {
-                            address: response.address
-                        }
-                    });
+                        this.$emit('form-event',{
+                            type: 'update-list',
+                            payload: {
+                                addresses: response.data.addresses
+                            }
+                        });
 
-                    if (response.status === 'success') {
                         setTimeout(()=>{
                             this.$notify({
                                 group: 'user-notification',
                                 title: vm.trans('translations.headings.notification'),
-                                text: vm.trans('translations.texts.account_updated')
+                                text: vm.trans('translations.texts.address_deleted'),
+                                type: 'error'
                             });
                         },400);
                     }
-                    
-                }).finally(() => {
-                    this.button.state = 'active';
+                }).catch(error => {
+                    alert('Unauthorized action.')
                 });
+            },
+            // Initialize semantic dropddown button
+            initializeDropdown() {
+
+                const vm = this;
+
+                $('.ui.dropdown').dropdown();
+
+                $('#country').change(function(){
+                
+                    vm.form.populate({
+                        country: $(this).val()
+                    });
+
+                    vm.form.errors.clear('country');
+                });
+            },
+            // Innitialize form action, method, post to handle add or update
+            initializeForm() {
+
+                const add_url = '/address/store';
+
+                const update_url = '/address/update';
+
+                // Check if address object is not empty
+                if (Object.entries(this.address).length > 0) {
+
+                    this.action = update_url;
+
+                    this.method = 'put';
+
+                    this.form.populate({
+                        id: this.address.id,
+                        user_id: this.user.id,
+                        name: this.address.name,
+                        country: this.address.country,
+                        state: this.address.state,
+                        city: this.address.city,
+                        postal: this.address.postal,
+                        address1: this.address.address1,
+                        address2: this.address.address2,
+                        phone: this.address.phone
+                    });
+
+                    this.show_delete = true;
+
+                } else {
+
+                    this.action = add_url;
+
+                    this.method = 'post';
+
+                    this.form.populate({
+                        user_id: this.user.id,
+                    });
+
+                    this.show_delete = false;
+                }
+            },
+            // Handles form submission
+            onSubmit() {
+
+                const vm = this;
+
+                if (this.button.state === 'active') {
+
+                    this.button.state = 'loading';
+
+                    this.validate(this.form, this.$refs.address_form).then(response => {
+
+                        if (response.status === 'success') {
+
+                            let message = (response.action === 'store') ? vm.trans('translations.texts.new_address_added') : vm.trans('translations.texts.address_updated');
+
+                            this.$emit('form-event',{
+                                type: 'update-list',
+                                payload: {
+                                    addresses: response.addresses
+                                }
+                            });
+
+                            setTimeout(()=>{
+                                this.$notify({
+                                    group: 'user-notification',
+                                    title: vm.trans('translations.headings.notification'),
+                                    text: message
+                                });
+                            },400);
+                        }
+                        
+                    }).finally(() => {
+                        this.button.state = 'active';
+                    });
+                }
             }
+        },
+        created() {
+            this.initializeForm();
         },
         mounted() {
 
-            const vm = this;
-
-            $('.ui.dropdown').dropdown();
-
-            this.form.populate({
-                'id': this.user.id
-            });
-
-            $('#country').change(function(){
-                
-                vm.form.populate({
-                    country: $(this).val()
-                });
-
-                vm.form.errors.clear('country');
-            });
+            setTimeout(()=>{
+                this.initializeDropdown();
+            },200);
+            
         },
         mixins: [FormValidation]
     }
