@@ -99,6 +99,15 @@
 
                 $('#card_element').addClass('StripeElement--invalid');
             },
+            validateEmpty() {
+
+                const card_element = $('#card_element');
+
+                if (card_element.hasClass('StripeElement--empty')) {
+                   
+                   card_element.addClass('StripeElement--invalid');
+                }
+            },
         },
         mounted() {
 

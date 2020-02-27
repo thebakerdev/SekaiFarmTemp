@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\shipment;
 use Laravel\Cashier\Cashier;
 use Illuminate\Http\Request;
+use App\Events\ShipmentCreated;
 use Illuminate\Support\Facades\Log;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
@@ -40,5 +41,7 @@ class StripeWebhookController extends CashierController
         ];
 
         $created_shipment = shipment::create($shipment);
+
+        event(new ShipmentCreated($subscription->stripe_plan, $subscription->quantity));
     }
 }

@@ -14,16 +14,6 @@ use App\Http\Requests\RegistrationRequest;
 class UserController extends Controller
 {
     /**
-     * Constructor
-     *
-     * @return void
-     */
-    public function __construct() 
-    {
-        $this->middleware('auth')->except(['store','validateData']);
-    }
-
-    /**
      * Displays user account pge
      *
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
@@ -75,9 +65,6 @@ class UserController extends Controller
 
         event(new UserRegistered($user, $request->input('qty'), $request->input('payment_method'), $request->input('product_id'))); 
         
-        //logs the user after creation
-        Auth::login($user);
-
         session(['subscription_details' => [
             'product_name' => $request->input('product_name'),
             'product_price' => $request->input('product_price'),

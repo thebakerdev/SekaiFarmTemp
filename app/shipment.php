@@ -99,6 +99,16 @@ class shipment extends Model
             return trans('translations.buttons.delivered');
         }
     }
+
+    /**
+     * Get delivery date
+     */
+    public function getDeliveryDateAttribute()
+    {
+        return Carbon::parse($this->attributes['created_at'])
+                ->addDays(2)
+                ->format('M d, Y');
+    }
     
     /**
      * Get shipment user

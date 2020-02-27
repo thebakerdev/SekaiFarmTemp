@@ -8,23 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class product extends Model
 {
-    protected $fillable = ['name', 'photo', 'price', 'stock', 'orders'];
-
-    /**
-     * Adjust/Update stock
-     *
-     * @param String $id
-     * @param String $stock
-     * @return void
-     */
-    public static function adjustStock($id, $stock)
-    {
-        $product = static::findOrFail($id);
-
-        $product->stock = $stock;
-
-        $product->save();
-    }
+    protected $fillable = ['name', 'photo', 'price', 'stock', 'orders','plan_id'];
     
     /**
      * Creates new product
@@ -54,6 +38,7 @@ class product extends Model
             'price' => request('price'),
             'stock' => request('stock'),
             'orders' => 0,
+            'plan_id' => env('STRIPE_PLAN')
         ]);
 
         return $product;

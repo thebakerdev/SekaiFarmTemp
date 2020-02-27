@@ -32,7 +32,11 @@
                         </tr>
                         @endforeach
                     @else
-
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <em>{{ trans('translations.texts.no_users') }}</em>
+                            </td>
+                        </tr>
                     @endif
                 </tbody>
             </table>

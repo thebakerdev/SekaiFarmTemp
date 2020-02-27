@@ -34,6 +34,8 @@ class IndexController extends Controller
             $payment_intent = session('payment_intent');
         } else {
             $payment_intent = SetupIntent::create([],Cashier::stripeOptions());
+            
+            session(['payment_intent' => $payment_intent]);
         }
 
         // check if there is a product and redirect to login if no products
@@ -44,7 +46,7 @@ class IndexController extends Controller
 
         session(['product' => $product->toArray()]);
 
-        $supported_countries = config('dropdowns.countries_asean');
+        $supported_countries = country::getCountryList();
 
         return view('storefront.index', compact('product', 'supported_countries','payment_intent','stripe_key'));
     }

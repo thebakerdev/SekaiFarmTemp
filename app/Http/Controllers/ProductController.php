@@ -8,32 +8,6 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     /**
-     * Updates product stock
-     *
-     * @param Illuminate\Http\Request $request
-     * @return Illuminate\Http\Response
-     */
-    public function adjustStock(Request $request)
-    {
-        $id = $request->input('id');
-
-        $stock = $request->input('stock');
- 
-        if ($stock == NULL) {
-            return back();
-        }
-
-        product::adjustStock($id, $stock);
-
-        session()->flash("notification", [
-            'message' => trans('translations.notifications.stock_adjusted'),
-            'type' => 'success',
-        ]);
-
-        return back();
-    }
-
-    /**
      * Creates a new product
      *
      * @param Illuminate\Http\Request $request

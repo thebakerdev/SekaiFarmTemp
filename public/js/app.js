@@ -2193,6 +2193,13 @@ __webpack_require__.r(__webpack_exports__);
 
       this.error.show = true;
       $('#card_element').addClass('StripeElement--invalid');
+    },
+    validateEmpty: function validateEmpty() {
+      var card_element = $('#card_element');
+
+      if (card_element.hasClass('StripeElement--empty')) {
+        card_element.addClass('StripeElement--invalid');
+      }
     }
   },
   mounted: function mounted() {
@@ -2281,6 +2288,8 @@ __webpack_require__.r(__webpack_exports__);
       login_data: new form_backend_validation__WEBPACK_IMPORTED_MODULE_0___default.a({
         email: '',
         password: ''
+      }, {
+        resetOnSuccess: false
       }),
       reset_data: new form_backend_validation__WEBPACK_IMPORTED_MODULE_0___default.a({
         email: ''
@@ -2299,8 +2308,7 @@ __webpack_require__.r(__webpack_exports__);
         if (response.status === 'success') {
           location.href = response.redirect_path;
         }
-      })["catch"](function (error) {//error here
-      })["finally"](function () {
+      })["catch"](function (error) {
         vm.is_loading = false;
       });
     },
@@ -2342,7 +2350,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var form_backend_validation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(form_backend_validation__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _StripeCheckout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./StripeCheckout */ "./resources/js/components/storefront/StripeCheckout.vue");
 /* harmony import */ var _mixins_formValidation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../mixins/formValidation */ "./resources/js/mixins/formValidation.js");
-/* harmony import */ var vue_imask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-imask */ "./node_modules/vue-imask/esm/index.js");
+/* harmony import */ var _mixins_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../mixins/common */ "./resources/js/mixins/common.js");
+/* harmony import */ var vue_imask__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-imask */ "./node_modules/vue-imask/esm/index.js");
 //
 //
 //
@@ -2448,6 +2457,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 
 
 
@@ -2455,7 +2467,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     'stripe-checkout': _StripeCheckout__WEBPACK_IMPORTED_MODULE_1__["default"],
-    'imask-input': vue_imask__WEBPACK_IMPORTED_MODULE_3__["IMaskComponent"]
+    'imask-input': vue_imask__WEBPACK_IMPORTED_MODULE_4__["IMaskComponent"]
   },
   props: {
     actionUrl: {
@@ -2488,7 +2500,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     total: function total() {
-      console.log(this.product);
       return this.product.price * this.qty;
     }
   },
@@ -2545,6 +2556,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         })["catch"](function (error) {
           _this.button.state = 'active';
+          vm.$refs.stripe_input.validateEmpty();
         });
       }
     }
@@ -2552,17 +2564,9 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var vm = this;
     this.form_action = this.validationUrl;
-    $('#country').change(function () {
-      vm.registration_data.populate({
-        country: $(this).val()
-      });
-      vm.registration_data.errors.clear('country');
-    });
-    $('.show_login_btn').click(function () {
-      $('#login_modal').modal('show');
-    });
+    this.initializeDropdown(this.registration_data, 'country');
   },
-  mixins: [_mixins_formValidation__WEBPACK_IMPORTED_MODULE_2__["default"]]
+  mixins: [_mixins_formValidation__WEBPACK_IMPORTED_MODULE_2__["default"], _mixins_common__WEBPACK_IMPORTED_MODULE_3__["default"]]
 });
 
 /***/ }),
@@ -27184,7 +27188,10 @@ var render = function() {
                         "button",
                         {
                           staticClass: "ui button button--primary mr-1",
-                          class: { disabled: _vm.is_loading },
+                          class: {
+                            loading: _vm.is_loading,
+                            disabled: _vm.is_loading
+                          },
                           attrs: { type: "submit" }
                         },
                         [
@@ -27317,7 +27324,10 @@ var render = function() {
                         "button",
                         {
                           staticClass: "ui button button--primary mr",
-                          class: { disabled: _vm.is_loading },
+                          class: {
+                            loading: _vm.is_loading,
+                            disabled: _vm.is_loading
+                          },
                           attrs: { type: "submit" }
                         },
                         [
@@ -27384,6 +27394,11 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "user-registration" }, [
+    _c("div", {
+      staticClass: "user-registration__overlay",
+      class: { active: _vm.button.state === "loading" }
+    }),
+    _vm._v(" "),
     _c(
       "form",
       {
@@ -27938,18 +27953,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "field" }, [
                   _c("label", { attrs: { for: "phone" } }, [
-                    _vm._v(
-                      _vm._s(_vm.trans("translations.labels.phone")) + " "
-                    ),
-                    _c("small", [
-                      _vm._v(
-                        "(" +
-                          _vm._s(
-                            _vm.trans("translations.labels.phone_tracking")
-                          ) +
-                          ")"
-                      )
-                    ])
+                    _vm._v(_vm._s(_vm.trans("translations.labels.phone")))
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "two fields" }, [
@@ -28009,30 +28013,30 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "user-registration__actions field mt-2" },
-          [
-            _vm.show_form
-              ? [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "ui large button button--primary",
-                      class: _vm.buttonStyle,
-                      attrs: { id: "subscribe_btn", type: "submit" }
-                    },
-                    [
-                      _vm._v(
-                        _vm._s(_vm.trans("translations.buttons.subscribe"))
-                      )
-                    ]
-                  )
-                ]
-              : _vm._e()
-          ],
-          2
-        )
+        _c("div", { staticClass: "user-registration__actions field mt-2" }, [
+          _vm.show_form
+            ? _c("div", { staticClass: "user-registration__actions-loader" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "ui large button button--primary",
+                    class: _vm.buttonStyle,
+                    attrs: { id: "subscribe_btn", type: "submit" }
+                  },
+                  [_vm._v(_vm._s(_vm.trans("translations.buttons.subscribe")))]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "loader",
+                    class: { active: _vm.button.state === "loading" }
+                  },
+                  [_vm._v(_vm._s(_vm.trans("translations.texts.loading")))]
+                )
+              ])
+            : _vm._e()
+        ])
       ],
       1
     ),
@@ -40744,6 +40748,33 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/mixins/common.js":
+/*!***************************************!*\
+  !*** ./resources/js/mixins/common.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var Common = {
+  methods: {
+    // initialize dropdown to work with form-validation
+    initializeDropdown: function initializeDropdown(form, field_name) {
+      $('.ui.dropdown').dropdown();
+      $('#' + field_name).change(function () {
+        var fields = {};
+        fields[field_name] = $(this).val();
+        form.populate(fields);
+        form.errors.clear(field_name);
+      });
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (Common);
+
+/***/ }),
+
 /***/ "./resources/js/mixins/formValidation.js":
 /*!***********************************************!*\
   !*** ./resources/js/mixins/formValidation.js ***!
@@ -40757,7 +40788,7 @@ var FormValidation = {
   computed: {
     buttonStyle: function buttonStyle() {
       return {
-        'disabled': this.button.state === 'disabled',
+        'disabled': this.button.state === 'disabled' || this.button.state === 'loading',
         'loading': this.button.state === 'loading'
       };
     }
@@ -40802,16 +40833,10 @@ var PageScripts = function () {
     // Semantic close button
     $('.message .close').on('click', function () {
       $(this).closest('.message').transition('fade');
-    }); // Semantic dropdown
-
-    $('.ui.dropdown').dropdown(); // Payment Sent Modal
-
-    $('#payment-sent-form').on('submit', function () {
-      // $('#payment-sent-modal').modal('show');
-      $('#dimmer').dimmer('show');
-    }); // Semantic Tab
-
-    $('.menu .item').tab();
+    });
+    $('.show_login_btn').click(function () {
+      $('#login_modal').modal('show');
+    });
   }
 
   return {

@@ -45,9 +45,6 @@
                         <a href="{{ route('admin.users') }}" class="{{ Request::segment(1)=='users' ? 'active teal':'' }} item">
                             <span> <i class="users icon"></i> {{ trans('translations.headings.users') }}</span>
                         </a>
-                        <a href="{{ action('SettingsController@index') }}" class="{{ Request::segment(1)=='settings' ? 'active teal':'' }} item">
-                            <span> <i class="cogs icon"></i>{{ trans('translations.headings.settings') }}</span>
-                        </a>
                     </div>
                 </div>
                 <div class="sixteen wide mobile eleven wide tablet thirteen wide computer column">

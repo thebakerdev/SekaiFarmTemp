@@ -57,7 +57,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="13" class="text-center">{{ __('translations.texts.no_sent') }}</td>
+                            <td colspan="13" class="text-center"><em>{{ __('translations.texts.no_sent') }}</em></td>
                         </tr>
                     @endif
                 </tbody>

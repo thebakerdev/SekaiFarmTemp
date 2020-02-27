@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Listeners\SetOrder;
 use App\Events\UserRegistered;
+use App\Events\ShipmentCreated;
 use App\Listeners\CreateSubscription;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserRegistered::class => [
             CreateSubscription::class
+        ],
+        ShipmentCreated::class => [
+            SetOrder::class
         ]
     ];
 

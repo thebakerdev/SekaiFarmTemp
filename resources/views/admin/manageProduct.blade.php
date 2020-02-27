@@ -88,7 +88,7 @@
                         @endforeach
                     @else
                         <tr class="ui center aligned">
-                            <td colspan="6" class="text-center"> {{ __('translations.texts.no_products') }}</td>
+                            <td colspan="6" class="text-center"><em>{{ __('translations.texts.no_products') }}</em></td>
                         </tr>
                     @endif
                 </tbody>

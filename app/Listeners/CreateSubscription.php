@@ -36,11 +36,7 @@ class CreateSubscription implements ShouldQueue
 
             $user->newSubscription('default', env('STRIPE_PLAN'))
                 ->quantity($event->qty)
-                ->create($event->payment_method,[
-                    'metadata' => [
-                        'product_id' => $event->product_id
-                    ]
-                ]);
+                ->create($event->payment_method);
 
         } catch(\Exception $e) {
             Log::error($e->getMessage());

@@ -8,12 +8,6 @@ use App\shipment;
 
 class AdminController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth:web-admin');
-    }
-
     /**
      * Returns all pending shipments
      *

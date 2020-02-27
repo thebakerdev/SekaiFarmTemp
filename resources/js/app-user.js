@@ -13,7 +13,9 @@ import PageScripts from './page-scripts';
 
 import Notifications from 'vue-notification';
 
-Vue.use(Notifications);
+import VuejsDialog from 'vuejs-dialog';
+
+import 'vuejs-dialog/dist/vuejs-dialog.min.css';
 
 Vue.prototype.trans = (string, args) => {
 
@@ -26,16 +28,28 @@ Vue.prototype.trans = (string, args) => {
     return value;
 };
 
+Vue.use(Notifications);
+
+Vue.use(VuejsDialog, {
+    okText: Vue.prototype.trans('translations.buttons.proceed'),
+    cancelText: Vue.prototype.trans('translations.buttons.cancel'),
+});
+
+
+
 import AddressContainer from './components/user/AddressContainer';
 
 import AccountContainer from './components/user/AccountContainer';
+
+import SubscriptionContainer from './components/user/SubscriptionContainer';
 
 /* Initialize vue */
 const app = new Vue({
     el: '#app-user',
     components: {
         'account-container': AccountContainer,
-        'address-container': AddressContainer
+        'address-container': AddressContainer,
+        'subscription-container': SubscriptionContainer
     },
     mounted() {
         PageScripts.init();

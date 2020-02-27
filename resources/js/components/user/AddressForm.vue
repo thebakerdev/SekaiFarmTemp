@@ -70,6 +70,8 @@
     
     import FormValidation from './../../mixins/formValidation';
 
+    import Common from './../../mixins/common';
+
     export default {
         components: {
             'imask-input': IMaskComponent
@@ -120,49 +122,39 @@
 
                 const vm = this;
 
-                axios.delete('/address/delete',{
-                    data: {
-                        id:id
-                    }
-                }).then(response => {
-
-                    if (response.data.status === 'success') {
-
-                        this.$emit('form-event',{
-                            type: 'update-list',
-                            payload: {
-                                addresses: response.data.addresses
+                this.$dialog.confirm(this.trans('translations.texts.delete_address'))
+                    .then(function(dialog) {
+                        axios.delete('/address/delete',{
+                            data: {
+                                id:id
                             }
+                        }).then(response => {
+
+                            if (response.data.status === 'success') {
+
+                                vm.$emit('form-event',{
+                                    type: 'update-list',
+                                    payload: {
+                                        addresses: response.data.addresses
+                                    }
+                                });
+
+                                setTimeout(()=>{
+                                    vm.$notify({
+                                        group: 'user-notification',
+                                        title: vm.trans('translations.headings.notification'),
+                                        text: vm.trans('translations.texts.address_deleted'),
+                                        type: 'error'
+                                    });
+                                },400);
+                            }
+                        }).catch(error => {
+                            alert('Unauthorized action.')
                         });
-
-                        setTimeout(()=>{
-                            this.$notify({
-                                group: 'user-notification',
-                                title: vm.trans('translations.headings.notification'),
-                                text: vm.trans('translations.texts.address_deleted'),
-                                type: 'error'
-                            });
-                        },400);
-                    }
-                }).catch(error => {
-                    alert('Unauthorized action.')
-                });
-            },
-            // Initialize semantic dropddown button
-            initializeDropdown() {
-
-                const vm = this;
-
-                $('.ui.dropdown').dropdown();
-
-                $('#country').change(function(){
-                
-                    vm.form.populate({
-                        country: $(this).val()
+                    })
+                    .catch(function() {
+                        return false;
                     });
-
-                    vm.form.errors.clear('country');
-                });
             },
             // Innitialize form action, method, post to handle add or update
             initializeForm() {
@@ -249,10 +241,10 @@
         mounted() {
 
             setTimeout(()=>{
-                this.initializeDropdown();
+                this.initializeDropdown(this.form,'country');
             },200);
             
         },
-        mixins: [FormValidation]
+        mixins: [FormValidation, Common],
     }
 </script>

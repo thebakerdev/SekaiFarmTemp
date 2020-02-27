@@ -1,5 +1,6 @@
 <template>
     <div class="user-registration">
+        <div class="user-registration__overlay" :class="{active: button.state === 'loading'}"></div>
         <form id="registration_form" method="post" :action="form_action" ref="registration_form" class="ui form" @submit.prevent="onRegister()" @keydown="registration_data.errors.clear($event.target.name)">
             <input type="hidden" name="_token" :value="csrf">
             <input type="hidden" name="qty" :value="qty">
@@ -79,7 +80,7 @@
                             <input type="text" id="address2" class="input" name="address2" v-model="registration_data.address2">
                         </div>
                         <div class="field">
-                            <label for="phone">{{ trans('translations.labels.phone') }} <small>({{trans('translations.labels.phone_tracking')}})</small></label>
+                            <label for="phone">{{ trans('translations.labels.phone') }}</label>
                             <div class="two fields">
                                 <div class="eight wide field" :class="registration_data.errors.has('phone') ? 'error':''">
                                     <imask-input v-model="registration_data.phone"  name="phone" :mask="'+num'" :blocks="{ num: { mask: Number}}" :lazy="true"/>
@@ -93,9 +94,10 @@
                 </div>
             </transition>
             <div class="user-registration__actions field mt-2">
-                <template v-if="show_form">
+                <div class="user-registration__actions-loader" v-if="show_form">
                     <button id="subscribe_btn" type="submit" class="ui large button button--primary" :class="buttonStyle">{{ trans('translations.buttons.subscribe') }}</button>
-                </template>
+                    <div class="loader" :class="{active: button.state === 'loading'}">{{ trans('translations.texts.loading') }}</div>
+                </div>
             </div>
         </form>
         <div class="user-registration__actions" v-show="show_form === false">
@@ -109,6 +111,8 @@
     import StripeCheckout from './StripeCheckout';
 
     import FormValidation from './../../mixins/formValidation';
+
+    import Common from './../../mixins/common';
 
     import {IMaskComponent} from 'vue-imask';
 
@@ -148,8 +152,6 @@
         },
         computed: {
             total() {
-
-                console.log(this.product);
                 return this.product.price * this.qty;
             }
         },
@@ -208,34 +210,24 @@
                                     this.button.state = 'active';
                                 }
                             }).catch(error => {
+                                
                                 this.button.state = 'active';
                             });
                         }
                     }).catch(error => {
                         this.button.state = 'active';
+                        vm.$refs.stripe_input.validateEmpty();
                     });
                 }
             }
         },
         mounted() {
-
             const vm = this;
 
             this.form_action = this.validationUrl;
 
-            $('#country').change(function(){
-                
-                vm.registration_data.populate({
-                    country: $(this).val()
-                });
-
-                vm.registration_data.errors.clear('country');
-            });
-
-            $('.show_login_btn').click(function() {
-                $('#login_modal').modal('show');
-            });
+            this.initializeDropdown(this.registration_data,'country');
         },
-        mixins: [FormValidation],
+        mixins: [FormValidation, Common],
     }
 </script>

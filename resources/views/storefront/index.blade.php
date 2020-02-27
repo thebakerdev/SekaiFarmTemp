@@ -2,11 +2,6 @@
 
 @section('page-title', 'Home')
 
-@section('page-style')
-    <link rel="stylesheet" href="{{ asset('css/slick.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/slick-theme.css') }}">
-@endsection
-
 @section('content')
     @if ($notification = session('notification'))
         <div class="ui container grid">
@@ -71,19 +66,3 @@
     <script src="{{ route('locale.localizeForJs') }}"></script>
 @endsection
 
-@section('page-script-after')
-    <script>
-        $(document).ready(function(){
-            $('#form_display_btn').click(function() {
-                
-                $('.product__form-input').fadeIn();
-                
-                $(this).fadeOut();
-                
-                $('#subscribe_btn').fadeIn();
-            });
-
-            
-        });
-    </script>
-@endsection

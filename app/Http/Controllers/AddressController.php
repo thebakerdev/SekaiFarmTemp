@@ -9,16 +9,6 @@ use App\Http\Requests\AddressRequest;
 class AddressController extends Controller
 {
     /**
-     * Constructor.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
-    /**
      * Displays user address list
      *
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory

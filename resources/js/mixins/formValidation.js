@@ -2,7 +2,7 @@ const FormValidation = {
     computed: {
         buttonStyle() {
             return {
-                'disabled': this.button.state === 'disabled',
+                'disabled': this.button.state === 'disabled' || this.button.state === 'loading',
                 'loading': this.button.state === 'loading'
             }
         }

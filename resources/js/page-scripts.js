@@ -7,18 +7,11 @@ const PageScripts = (function(){
         $('.message .close').on('click', function() {
             $(this).closest('.message').transition('fade');
         });
+        
 
-        // Semantic dropdown
-        $('.ui.dropdown').dropdown();
-
-        // Payment Sent Modal
-        $('#payment-sent-form').on('submit', function(){
-           // $('#payment-sent-modal').modal('show');
-           $('#dimmer').dimmer('show');
+        $('.show_login_btn').click(function() {
+            $('#login_modal').modal('show');
         });
-
-        // Semantic Tab
-        $('.menu .item').tab();
     }
 
     return {

@@ -18,8 +18,11 @@
                         <td class="text-right"><strong>${{ $total }}</strong></td>
                     </tr>
                 </table>
-                <a href="{{ route('user.orders.index') }}" class="ui button button--secondary mt-2">{{ trans('translations.buttons.go_to_dashboard') }}</a>
+                <button type="button" class="ui button button--secondary mt-2 show_login_btn">{{ trans('translations.texts.sign_in') }}</button>
             </div>
         </div>
     </div>
+@endsection
+@section('page-script-before')
+    <script src="{{ route('locale.localizeForJs') }}"></script>
 @endsection

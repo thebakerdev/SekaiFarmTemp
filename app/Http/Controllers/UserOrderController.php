@@ -25,8 +25,6 @@ class UserOrderController extends Controller
     {
         $user = auth()->user();
 
-      //  dd($user->delivered()->count());
-
         return view('user.orders')->with([
             'user' => $user
         ]);

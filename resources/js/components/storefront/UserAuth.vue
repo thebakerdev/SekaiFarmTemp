@@ -16,7 +16,7 @@
                         <a href="javascript:void(0)" class="color--yellow" @click="show_login = false">{{ trans('translations.texts.forgot_password') }}</a>
                     </div>
                     <div class="mt-2 text-center user-auth__actions">
-                        <button type="submit" class="ui button button--primary mr-1" :class="{disabled: is_loading}">{{ trans('translations.texts.sign_in') }}</button>
+                        <button type="submit" class="ui button button--primary mr-1" :class="{loading: is_loading, disabled: is_loading}">{{ trans('translations.texts.sign_in') }}</button>
                         <button type="button" class="ui  cancel button mr-0" :class="{disabled: is_loading}" @click="closeModal()">{{ trans('translations.buttons.cancel') }}</button>
                     </div>
                 </form>
@@ -30,7 +30,7 @@
                         <input type="email" id="reset_email" name="login_email" data-name="email" v-model="reset_data.email">
                     </div>
                     <div class="mt-2 text-center login__actions">
-                        <button type="submit" class="ui button button--primary mr" :class="{disabled: is_loading}">{{ trans('translations.buttons.send_reset_link') }}</button>
+                        <button type="submit" class="ui button button--primary mr" :class="{loading: is_loading, disabled: is_loading}">{{ trans('translations.buttons.send_reset_link') }}</button>
                     </div>
                     <div class="text-center mt-1">
                         <a href="javascript:void(0)" class="color--yellow" @click="show_login = true">{{ trans('translations.buttons.back_to_login') }}</a>
@@ -69,7 +69,7 @@
                 login_data: new Form({
                     email: '',
                     password: ''
-                }),
+                },{ resetOnSuccess: false }),
                 reset_data: new Form({
                     email: ''
                 }),
@@ -91,8 +91,6 @@
                         location.href = response.redirect_path;
                     }
                 }).catch(error => {
-                    //error here
-                }).finally(()=> {
                     vm.is_loading = false;
                 });
             },

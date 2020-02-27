@@ -1,0 +1,33 @@
+.dg-content-body {
+    border-bottom: 1px solid #E1E6EA !important;
+}
+
+.dg-content-footer {
+    display: flex !important;
+    justify-content: flex-end;
+}
+.dg-pull-right {
+    float: none !important;
+}
+
+.dg-btn {
+    font-size: 14px !important;
+    margin: 0 5px;
+    @extend .button;
+}
+
+.dg-btn--ok {
+    border-color: transparent !important;
+    order: 1;
+    @extend .button--primary;
+}
+
+.dg-btn--cancel {
+    background-color: #e0e1e2 !important;
+    order: 2;
+    @extend .button;
+
+    &:hover {
+        background-color: #cacbcd !important;
+    }
+}

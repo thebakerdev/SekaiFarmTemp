@@ -20,7 +20,7 @@
                         <tr role="row" class="table-custom__row--highlight">
                             <td role="cell" data-header="{{ trans('translations.labels.order') }} #">{{ $user->undelivered[0]->order_number }}</td>
                             <td role="cell" data-header="{{ trans('translations.labels.quantity') }}" class="align-center">{{ $user->undelivered[0]->qty }}</td>
-                            <td role="cell" data-header="{{ trans('translations.labels.delivery_date') }} #">{{ $user->undelivered[0]->created_at }}</td>
+                            <td role="cell" data-header="{{ trans('translations.labels.delivery_date') }} #">{{ $user->undelivered[0]->delivery_date }}</td>
                         </tr>
                     @else
                         <tr>
@@ -41,7 +41,7 @@
                         <th role="columnheader" class="align-center">{{ trans('translations.labels.quantity') }}</th>
                         <th role="columnheader">{{ trans('translations.labels.status') }}</th>
                         <th role="columnheader">{{ trans('translations.labels.date_delivered') }}</th>
-                        <th></th>
+                        <th role="columnheader">{{ trans('translations.labels.invoice') }}</th>
                     </tr>
                 </thead>
                 <tbody role="rowgroup">
@@ -52,12 +52,12 @@
                                 <td role="cell" data-header="{{ trans('translations.labels.quantity') }}" class="align-center">{{ $delivered->qty }}</td>
                                 <td role="cell" data-header="{{ trans('translations.labels.status') }}">{{ $delivered->status }}</td>
                                 <td role="cell" data-header="{{ trans('translations.labels.date_delivered') }}">{{ $delivered->date_delivered }}</td>
-                                <td><a href="{{ $delivered->invoice_url }}" target="_blank"><i class="file alternate outline icon"></i></a></td>
+                                <td role="cell" data-header="{{ trans('translations.labels.invoice') }}"><a href="{{ $delivered->invoice_url }}" target="_blank"><i class="file alternate outline icon"></i></a></td>
                             </tr>
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="3" class="text-center">
+                            <td colspan="5" class="text-center">
                                 <em>{{ trans('translations.texts.no_order_history') }}</em>
                             </td>
                         </tr>

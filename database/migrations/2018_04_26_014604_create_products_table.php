@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->integer('price');
             $table->integer('stock');
             $table->integer('orders');
+            $table->string('plan_id');
             $table->timestamps();
         });
     }
