@@ -175,10 +175,13 @@ return [
         'shipment_was_delivered' => 'Shipment was delivered',
         'shipping_time' => 'Will ship within 48 hours to',
         'sign_in' => 'Sign In',
+        'subscribe_back_message' => 'Subscribe back to continue receiving our products.',
         'subscribed' => 'Subscribed',
+        'subscription_reactivated_message' => 'Your subscription has been reactivated.',
         'subscription_success' => 'Subscription Success!',
         'subscription_success_message' => 'Thank you for subscribing to our product. You will receive <strong>:qty :product</strong> and will be charged <strong>:total</strong> every month.',
-        'total' => 'Total'
+        'total' => 'Total',
+        'unsubscribed' => 'Unsubscribed',
     ],
     'countries' => [
         'united_states' => 'United States',

@@ -37,14 +37,7 @@ class SubscriptionController extends Controller
 
         $stripe_key = env('STRIPE_KEY');
 
-        if (session('payment_intent') !== null) {
-            
-            $payment_intent = session('payment_intent');
-        } else {
-            $payment_intent = SetupIntent::create([],Cashier::stripeOptions());
-
-            //session(['payment_intent' => $payment_intent]);
-        }
+        $payment_intent = SetupIntent::create([],Cashier::stripeOptions());
 
         return view('user.subscription')->with([
             'user' => $user,
@@ -65,6 +58,8 @@ class SubscriptionController extends Controller
     {
         $user = auth()->user();
 
+        //$user->subscription('default')->cancelNow();
+
         $user->subscription('default')->cancel();
 
         return response()->json([
@@ -83,6 +78,25 @@ class SubscriptionController extends Controller
         $user = auth()->user();
 
         $user->subscription('default')->resume();
+
+        return response()->json([
+            'status' => 'success'
+        ],200);
+    }
+
+    /**
+     * Reactivates subscription and creates a new one
+     *
+     * @param Illuminate\Http\Request
+     * @return Illuminate\Http\Response
+     */
+    public function reactivate(Request $request)
+    {
+        $user = auth()->user();
+
+        $user->newSubscription('default', env('STRIPE_PLAN'))
+                ->quantity($request->input('qty'))
+                ->create();
 
         return response()->json([
             'status' => 'success'
@@ -156,11 +170,10 @@ class SubscriptionController extends Controller
 
         $payment_intent = SetupIntent::create([],Cashier::stripeOptions());
 
-       // session(['payment_intent' => $payment_intent]);
-
         return response()->json([
             'status' => 'success',
-            'payment_intent' => $payment_intent
+            'payment_intent' => $payment_intent,
+            'card_last_four' => $user->card_last_four
         ],200);
     }
 }

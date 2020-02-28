@@ -188,6 +188,8 @@
                     this.validate(this.registration_data, this.$refs.registration_form).then(response => {
 
                         if (response.status === 'success') {
+
+                            console.log(response);
                             
                             vm.$refs.stripe_input.confirmCardSetup().then(response => {
 

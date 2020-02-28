@@ -10,6 +10,7 @@ use App\Events\UserRegistered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegistrationRequest;
+use Laravel\Cashier\Exceptions\IncompletePayment;
 
 class UserController extends Controller
 {
@@ -63,13 +64,32 @@ class UserController extends Controller
             return $user;
         });
 
-        event(new UserRegistered($user, $request->input('qty'), $request->input('payment_method'), $request->input('product_id'))); 
+        //event(new UserRegistered($user, $request->input('qty'), $request->input('payment_method'), $request->input('product_id'))); 
         
         session(['subscription_details' => [
             'product_name' => $request->input('product_name'),
             'product_price' => $request->input('product_price'),
             'qty' => $request->input('qty')
         ]]);
+
+        try {
+           
+            $user->createAsStripeCustomer();
+
+            $user->addPaymentMethod($request->input('payment_method'));
+
+            $user->newSubscription('default', env('STRIPE_PLAN'))
+                ->quantity($request->input('qty'))
+                ->create($request->input('payment_method'));
+
+        } catch(IncompletePayment $e) {
+
+            return redirect()->route(
+                'cashier.payment',
+                [$e->payment->id, 'redirect' => route('success')]
+            );
+        }
+        
 
         return redirect(route('success'));
     }

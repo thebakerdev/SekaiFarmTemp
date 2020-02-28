@@ -29,16 +29,8 @@ class IndexController extends Controller
 
         $stripe_key = env('STRIPE_KEY');
 
-        if (session('payment_intent') !== null) {
-            
-            $payment_intent = session('payment_intent');
-        } else {
-            $payment_intent = SetupIntent::create([],Cashier::stripeOptions());
-            
-            session(['payment_intent' => $payment_intent]);
-        }
+        $payment_intent = SetupIntent::create([],Cashier::stripeOptions());
 
-        // check if there is a product and redirect to login if no products
         if ($product === null) {
 
             return redirect('/bluelogin');

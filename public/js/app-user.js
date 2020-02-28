@@ -2829,6 +2829,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2857,19 +2871,28 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     }
   },
+  computed: {
+    total: function total() {
+      return this.product.price * this.new_subscription.qty;
+    }
+  },
   data: function data() {
     return {
       status: '',
       //subscribed, canceled, unsubscribed,
       client_secret: this.clientSecret,
       card: {
-        editing: true,
-        saving: false
+        editing: false,
+        saving: false,
+        last_four: this.user.card_last_four
       },
       qty: {
         editing: false,
         saving: false,
         value: this.subscription.quantity
+      },
+      new_subscription: {
+        qty: 1
       }
     };
   },
@@ -2906,8 +2929,34 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    resumeSubscription: function resumeSubscription() {
+    reactivateSubscription: function reactivateSubscription() {
       var _this2 = this;
+
+      var vm = this;
+
+      if (this.button.state === 'active') {
+        this.button.state = 'loading';
+        axios.post('/subscription/reactivate', {
+          qty: this.new_subscription.qty
+        }).then(function (response) {
+          if (response.data.status === 'success') {
+            vm.qty.value = vm.new_subscription.qty;
+            vm.checkSubscriptionStatus();
+            setTimeout(function () {
+              _this2.$notify({
+                group: 'user-notification',
+                title: vm.trans('translations.headings.notification'),
+                text: vm.trans('translations.texts.subscription_reactivated_message')
+              });
+            }, 400);
+          }
+        })["finally"](function () {
+          _this2.button.state = 'active';
+        });
+      }
+    },
+    resumeSubscription: function resumeSubscription() {
+      var _this3 = this;
 
       var vm = this;
 
@@ -2917,7 +2966,7 @@ __webpack_require__.r(__webpack_exports__);
           if (response.data.status === 'success') {
             vm.checkSubscriptionStatus();
             setTimeout(function () {
-              _this2.$notify({
+              _this3.$notify({
                 group: 'user-notification',
                 title: vm.trans('translations.headings.notification'),
                 text: vm.trans('translations.texts.resume_subscription_message')
@@ -2925,12 +2974,12 @@ __webpack_require__.r(__webpack_exports__);
             }, 400);
           }
         })["finally"](function () {
-          _this2.button.state = 'active';
+          _this3.button.state = 'active';
         });
       }
     },
     updateCard: function updateCard() {
-      var _this3 = this;
+      var _this4 = this;
 
       var vm = this;
 
@@ -2943,8 +2992,10 @@ __webpack_require__.r(__webpack_exports__);
               payment_method: payment_method
             }).then(function (response) {
               vm.client_secret = response.data.payment_intent.client_secret;
+              vm.card.editing = false;
+              vm.card.last_four = response.data.card_last_four;
               setTimeout(function () {
-                _this3.$notify({
+                _this4.$notify({
                   group: 'user-notification',
                   title: vm.trans('translations.headings.notification'),
                   text: vm.trans('translations.texts.card_updated')
@@ -2965,7 +3016,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     updateQuantity: function updateQuantity() {
-      var _this4 = this;
+      var _this5 = this;
 
       var vm = this;
 
@@ -2977,7 +3028,7 @@ __webpack_require__.r(__webpack_exports__);
           if (response.data.status === 'success') {
             vm.qty.editing = false;
             setTimeout(function () {
-              _this4.$notify({
+              _this5.$notify({
                 group: 'user-notification',
                 title: vm.trans('translations.headings.notification'),
                 text: vm.trans('translations.texts.quantity_update_message')
@@ -28400,6 +28451,20 @@ var render = function() {
                     ])
                   ]
                 )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.status === "unsubscribed"
+              ? _c(
+                  "span",
+                  { staticClass: "field__item", attrs: { id: "status" } },
+                  [
+                    _c("a", { staticClass: "ui label color--white bg--red" }, [
+                      _vm._v(
+                        _vm._s(_vm.trans("translations.texts.unsubscribed"))
+                      )
+                    ])
+                  ]
+                )
               : _vm._e()
           ]),
           _vm._v(" "),
@@ -28417,125 +28482,160 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "field" }, [
-            _c(
-              "label",
-              { staticClass: "field__item", attrs: { for: "quantity" } },
-              [_vm._v(_vm._s(_vm.trans("translations.labels.quantity")))]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.qty.editing === true,
-                    expression: "qty.editing === true"
-                  }
-                ],
-                staticClass: "ui form product__qty"
-              },
-              [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.qty.value,
-                      expression: "qty.value"
-                    }
-                  ],
-                  attrs: { type: "number", id: "qty", name: "qty" },
-                  domProps: { value: _vm.qty.value },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.qty, "value", $event.target.value)
-                    }
-                  }
-                }),
-                _vm._v(" "),
+          _vm.status !== "unsubscribed"
+            ? _c("div", { staticClass: "field" }, [
                 _c(
-                  "button",
-                  {
-                    staticClass: "ui button button--primary mt-1",
-                    class: {
-                      loading: _vm.qty.saving,
-                      disabled: _vm.qty.saving
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.updateQuantity()
-                      }
-                    }
-                  },
-                  [_vm._v(_vm._s(_vm.trans("translations.buttons.save")))]
+                  "label",
+                  { staticClass: "field__item", attrs: { for: "qty" } },
+                  [_vm._v(_vm._s(_vm.trans("translations.labels.quantity")))]
                 ),
                 _vm._v(" "),
                 _c(
-                  "span",
+                  "div",
                   {
-                    staticClass: "c-pointer",
-                    attrs: { role: "button" },
-                    on: {
-                      click: function($event) {
-                        _vm.qty.editing = false
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.qty.editing === true,
+                        expression: "qty.editing === true"
                       }
-                    }
+                    ],
+                    staticClass: "ui form product__qty"
                   },
-                  [_vm._v(_vm._s(_vm.trans("translations.buttons.cancel")))]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.qty.editing === false,
-                    expression: "qty.editing === false"
-                  }
-                ]
-              },
-              [
-                _c(
-                  "span",
-                  { staticClass: "field__item", attrs: { id: "quantity" } },
                   [
-                    _vm._v(
-                      _vm._s(_vm.qty.value) +
-                        " / " +
-                        _vm._s(_vm.trans("translations.texts.per_month"))
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.qty.value,
+                          expression: "qty.value"
+                        }
+                      ],
+                      attrs: { type: "number", id: "qty", name: "qty" },
+                      domProps: { value: _vm.qty.value },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.qty, "value", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "ui button button--primary mt-1",
+                        class: {
+                          loading: _vm.qty.saving,
+                          disabled: _vm.qty.saving
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.updateQuantity()
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(_vm.trans("translations.buttons.save")))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        staticClass: "c-pointer",
+                        attrs: { role: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.qty.editing = false
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(_vm.trans("translations.buttons.cancel")))]
                     )
                   ]
                 ),
                 _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
                 _c(
-                  "a",
+                  "div",
                   {
-                    staticClass:
-                      "link link--secondary text-uppercase c-pointer",
-                    attrs: { href: "javascript:void(0)" },
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.qty.editing === false,
+                        expression: "qty.editing === false"
+                      }
+                    ]
+                  },
+                  [
+                    _c(
+                      "span",
+                      { staticClass: "field__item", attrs: { id: "qty" } },
+                      [
+                        _vm._v(
+                          _vm._s(_vm.qty.value) +
+                            " / " +
+                            _vm._s(_vm.trans("translations.texts.per_month"))
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass:
+                          "link link--secondary text-uppercase c-pointer",
+                        attrs: { href: "javascript:void(0)" },
+                        on: {
+                          click: function($event) {
+                            _vm.qty.editing = true
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(_vm.trans("translations.buttons.edit")))]
+                    )
+                  ]
+                )
+              ])
+            : _c("div", { staticClass: "field" }, [
+                _c(
+                  "label",
+                  { staticClass: "field__item", attrs: { for: "qty" } },
+                  [_vm._v(_vm._s(_vm.trans("translations.labels.quantity")))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "ui form product__qty" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.new_subscription.qty,
+                        expression: "new_subscription.qty"
+                      }
+                    ],
+                    attrs: { type: "number", id: "qty", name: "qty" },
+                    domProps: { value: _vm.new_subscription.qty },
                     on: {
-                      click: function($event) {
-                        _vm.qty.editing = true
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.new_subscription,
+                          "qty",
+                          $event.target.value
+                        )
                       }
                     }
-                  },
-                  [_vm._v(_vm._s(_vm.trans("translations.buttons.edit")))]
-                )
-              ]
-            )
-          ]),
+                  })
+                ])
+              ]),
           _vm._v(" "),
           _c("div", { staticClass: "field" }, [
             _c(
@@ -28616,7 +28716,7 @@ var render = function() {
                 _c(
                   "span",
                   { staticClass: "field__item", attrs: { id: "name_in_card" } },
-                  [_vm._v(" ***********" + _vm._s(_vm.user.card_last_four))]
+                  [_vm._v(" ***********" + _vm._s(_vm.card.last_four))]
                 ),
                 _vm._v(" "),
                 _c("br"),
@@ -28711,6 +28811,37 @@ var render = function() {
                     )
                   )
                 ]
+              )
+            ]
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.status === "unsubscribed"
+          ? [
+              _c("h3", { staticClass: "subscription__heading mb-0" }, [
+                _vm._v("\n                $" + _vm._s(_vm.total) + " / "),
+                _c("span", [
+                  _vm._v(_vm._s(_vm.trans("translations.texts.per_month")))
+                ])
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  _vm._s(_vm.trans("translations.texts.subscribe_back_message"))
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "ui button button--secondary button--fixed",
+                  class: _vm.buttonStyle,
+                  on: {
+                    click: function($event) {
+                      return _vm.reactivateSubscription()
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.trans("translations.buttons.subscribe")))]
               )
             ]
           : _vm._e()

@@ -87,6 +87,7 @@ Route::middleware(['localizebybrowser'])->group(function() {
         Route::get('/subscription/check-status', 'SubscriptionController@checkSubscriptionStatus')->name('user.subscription.checkSubscriptionStatus');
         Route::put('/subscription/update/quantity', 'SubscriptionController@updateQuantity')->name('user.subscription.updateQuantity');
         Route::put('/subscription/update/card', 'SubscriptionController@updateCard')->name('user.subscription.updateCard');
+        Route::post('/subscription/reactivate', 'SubscriptionController@reactivate')->name('user.subscription.reactivate');
     });
 });
 

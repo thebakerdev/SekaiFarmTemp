@@ -2,10 +2,13 @@
 
 namespace App\Listeners;
 
+use Laravel\Cashier\Cashier;
+use Laravel\Cashier\Payment;
 use App\Events\UserRegistered;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
+use Laravel\Cashier\Exceptions\IncompletePayment;
 
 class CreateSubscription implements ShouldQueue
 {
@@ -30,6 +33,7 @@ class CreateSubscription implements ShouldQueue
         $user = $event->user;
 
         try {
+           
             $user->createAsStripeCustomer();
 
             $user->addPaymentMethod($event->payment_method);
@@ -38,6 +42,11 @@ class CreateSubscription implements ShouldQueue
                 ->quantity($event->qty)
                 ->create($event->payment_method);
 
+        } catch(IncompletePayment $e) {
+
+            //$payment_intent = StripePaymentIntent::retrieve($e->payment->id, Cashier::stripeOptions());
+
+            Log::error($e);
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }

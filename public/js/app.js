@@ -2536,6 +2536,7 @@ __webpack_require__.r(__webpack_exports__);
         this.button.state = 'loading';
         this.validate(this.registration_data, this.$refs.registration_form).then(function (response) {
           if (response.status === 'success') {
+            console.log(response);
             vm.$refs.stripe_input.confirmCardSetup().then(function (response) {
               if (typeof response.setupIntent !== 'undefined') {
                 var form = document.getElementById('registration_form');

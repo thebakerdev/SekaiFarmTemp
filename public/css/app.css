@@ -1188,6 +1188,16 @@ address {
   }
 }
 
+.subscription__heading {
+  color: #8AC926;
+  font-size: 38px;
+  font-weight: 700 !important;
+}
+
+.subscription__heading span {
+  font-size: 20px;
+}
+
 .user__menu a {
   color: #505050;
   -webkit-transition: all 0.1s ease-in;
